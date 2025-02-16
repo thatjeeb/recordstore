@@ -41,5 +41,9 @@ jobs:
       - run: git commit -m "Automatic Build and Deploy run by GitHub Actions"
         shell: bash
 
+      - run: git remote set-url origin https://git:${GITHUB_TOKEN}@github.com/${GITHUB_REPOSITORY}.git
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
       - run: git push origin HEAD:gh-pages --force
         shell: bash
