@@ -7,7 +7,7 @@ export default {
   devtool: prod ? undefined : 'source-map',
   entry: './src/index.tsx',
   output: {
-    path: import.meta.dirname + '/dist/',
+    path: import.meta.dirname + '/docs/',
     filename: 'index.js',
     publicPath: '/',
   },

@@ -2,10 +2,11 @@
   "name": "recordstore",
   "version": "1.0.0",
   "description": "An app to backup all your Spotify playlists and albums",
+  "homepage": "https://thatjeeb.github.io/recordstore",
   "main": "dist/index.js",
   "scripts": {
     "start": "webpack-dev-server --open --hot",
-    "build": "rimraf dist && NODE_ENV=production webpack",
+    "build": "rimraf docs && cross-env NODE_ENV=production && webpack --config webpack.config.mjs",
     "eslint": "eslint",
     "tslint": "tsc --noEmit --skipLibCheck"
   },
@@ -17,6 +18,7 @@
     "@types/react-dom": "^19.0.2",
     "@types/react-router-dom": "^5.3.3",
     "@typescript-eslint/parser": "^8.23.0",
+    "cross-env": "^7.0.3",
     "css-loader": "^7.1.2",
     "eslint": "^9.20.0",
     "eslint-plugin-react": "^7.37.4",
