@@ -1,0 +1,44 @@
+name: Deploy Record Store
+
+on:
+  push:
+    branches: ["main"]
+  pull_request:
+    branches: ["main"]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    strategy:
+      matrix:
+        node-version: [23.x]
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Use Node.js ${{ matrix.node-version }}
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ matrix.node-version }}
+
+      - run: npm ci
+        shell: bash
+
+      - run: npm run build
+        shell: bash
+
+      - run: git config user.name github-actions
+        shell: bash
+
+      - run: git config user.email github-actions@github.com
+        shell: bash
+
+      - run: git --work-tree docs add --all
+        shell: bash
+
+      - run: git commit -m "Automatic Build and Deploy run by GitHub Actions"
+        shell: bash
+
+      - run: git push origin HEAD:gh-pages --force
+        shell: bash
