@@ -1,0 +1,21 @@
+@mixin link-line {
+  &:after {
+    content: "";
+    display: block;
+    width: 0;
+    height: 2px;
+    margin-top: 2px;
+
+    background: var(--mint);
+    transition: var(--defaultTransition);
+  }
+
+  &.active,
+  &:hover {
+    color: var(--mint);
+
+    &:after {
+      width: 80%;
+    }
+  }
+}
