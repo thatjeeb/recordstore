@@ -13,3 +13,4 @@ REDIRECT_URI_BASE="https://127.0.0.1"
 ```
 
 `<your_client_id>` is found within the settings when you create an app in Spotify Developer tools.
+
