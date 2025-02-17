@@ -14,7 +14,7 @@ export default {
   output: {
     path: import.meta.dirname + "/docs/",
     filename: "index.js",
-    publicPath: prod ? "" : "/",
+    publicPath: process.env.PUBLIC_PATH,
   },
   module: {
     rules: [
@@ -41,6 +41,8 @@ export default {
     }),
   ],
   devServer: {
-    historyApiFallback: true,
+    historyApiFallback: {
+      index: process.env.PUBLIC_PATH + "index.html"
+    },
   },
 };
