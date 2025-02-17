@@ -14,7 +14,7 @@ export default {
   output: {
     path: import.meta.dirname + "/docs/",
     filename: "index.js",
-    publicPath: process.env.PUBLIC_PATH,
+    publicPath: prod ? "" : "/",
   },
   module: {
     rules: [
