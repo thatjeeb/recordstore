@@ -1,7 +1,6 @@
 export const spotifyConsts = {
-  clientId: "",
-  redirectUri: "http://127.0.0.1:8080/callback",
-  // redirectUri: "http://localhost:8080/callback",
+  clientId: process.env.CLIENT_ID || "",
+  redirectUri: process.env.REDIRECT_URI_BASE + "/callback",
   scope: "user-read-private user-read-email user-library-read playlist-read-private",
   codeVerifierStorageKey: "recordStoreSpotifyCodeVerifier",
   accessTokenStorageKey: "recordStoreSpotifyAccessToken",
@@ -9,6 +8,9 @@ export const spotifyConsts = {
   expiresInStorageKey: "recordStoreSpotifyExpiresIn",
   expiryDateStorageKey: "recordStoreSpotifyExpiryDate",
 };
+
+// TODO remove
+console.log("penv", process.env);
 
 export const spotifyUrls = {
   auth: "https://accounts.spotify.com/authorize",

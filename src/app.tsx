@@ -35,7 +35,7 @@ function App(): ReactNode {
   return (
     <div className={AppClasses.App}>
       <div className={AppClasses.Header}>Record Store</div>
-      <BrowserRouter>
+      <BrowserRouter basename={process.env.PUBLIC_PATH}>
         <Nav />
         <div className={AppClasses.Content}>
           <Routes>

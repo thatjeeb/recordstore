@@ -1,15 +1,20 @@
-import HtmlWebpackPlugin from 'html-webpack-plugin'
+import webpack from "webpack";
+import dotenv from "dotenv";
+import HtmlWebpackPlugin from "html-webpack-plugin";
 
-const prod = process.env.NODE_ENV === 'production'
+const prod = process.env.NODE_ENV === "production";
+
+const envFileVars = dotenv.config({ path: ".env" }).parsed || {};
+const envVars = { ...process.env, ...envFileVars };
 
 export default {
-  mode: prod ? 'production' : 'development',
-  devtool: prod ? undefined : 'source-map',
-  entry: './src/index.tsx',
+  mode: prod ? "production" : "development",
+  devtool: prod ? undefined : "source-map",
+  entry: "./src/index.tsx",
   output: {
-    path: import.meta.dirname + '/docs/',
-    filename: 'index.js',
-    publicPath: '/RecordStore',
+    path: import.meta.dirname + "/docs/",
+    filename: "index.js",
+    publicPath: process.env.PUBLIC_PATH,
   },
   module: {
     rules: [
@@ -17,23 +22,25 @@ export default {
         test: /\.(ts|tsx)$/,
         exclude: /node_modules/,
         resolve: {
-          extensions: ['.ts', '.tsx', '.js', '.json'],
+          extensions: [".ts", ".tsx", ".js", ".json"],
         },
-        use: 'ts-loader',
+        use: "ts-loader",
       },
       {
         test: /\.(s(a|c)ss|css)$/i,
-        use: ["style-loader", "css-loader", "sass-loader"]
+        use: ["style-loader", "css-loader", "sass-loader"],
       },
-    ]
+    ],
   },
   plugins: [
     new HtmlWebpackPlugin({
-      template: './src/index.html',
+      template: "./src/index.html",
+    }),
+    new webpack.DefinePlugin({
+      "process.env": JSON.stringify(envVars),
     }),
   ],
   devServer: {
     historyApiFallback: true,
   },
-}
-
+};

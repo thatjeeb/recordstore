@@ -25,8 +25,12 @@ jobs:
       - run: npm ci
         shell: bash
 
-      - run: npm run build
+      - run: npm run build:development
         shell: bash
+        env:
+          CLIENT_ID: ${{ secrets.CLIENT_ID }}
+          PUBLIC_PATH: ${{ vars.PUBLIC_PATH }}
+          REDIRECT_URI_BASE: ${{ vars.REDIRECT_URI_BASE }}
 
       - run: git config user.name github-actions
         shell: bash
