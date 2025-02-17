@@ -40,5 +40,5 @@ jobs:
       - run: git commit -m "Automatic Build and Deploy run by GitHub Actions"
         shell: bash
 
-      - run: git push origin HEAD:gh-pages
+      - run: git push origin HEAD:gh-pages --force
         shell: bash
