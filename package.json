@@ -7,7 +7,6 @@
   "scripts": {
     "start": "webpack-dev-server --open --hot",
     "build": "rimraf docs && cross-env NODE_ENV=production webpack --config webpack.config.mjs",
-    "build:development": "rimraf docs && cross-env NODE_ENV=production webpack --config webpack.config.mjs",
     "eslint": "eslint",
     "tslint": "tsc --noEmit --skipLibCheck"
   },

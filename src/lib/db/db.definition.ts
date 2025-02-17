@@ -1,6 +1,6 @@
 export const dbConsts = {
   name: "recordStoreDb",
-  version: 6,
+  version: 1,
 };
 
 export enum StoreName {

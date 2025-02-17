@@ -25,7 +25,7 @@ jobs:
       - run: npm ci
         shell: bash
 
-      - run: npm run build:development
+      - run: npm run build
         shell: bash
         env:
           CLIENT_ID: ${{ secrets.CLIENT_ID }}
