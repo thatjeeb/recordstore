@@ -9,7 +9,7 @@ export default {
   output: {
     path: import.meta.dirname + '/docs/',
     filename: 'index.js',
-    // publicPath: '/',
+    publicPath: '/RecordStore',
   },
   module: {
     rules: [
