@@ -34,15 +34,9 @@ export const Home = (): ReactNode => {
 
       <div className={AppClasses.ButtonRow}>
         {!loggedIn ? (
-          // todo remove this fragment
-          <>
-            <button className={AppClasses.PrimaryButton} onClick={goToSpotifyAuth}>
-              Login to Spotify
-            </button>
-
-            {/* todo remove this button */}
-            <ViewLibraryButton />
-          </>
+          <button className={AppClasses.PrimaryButton} onClick={goToSpotifyAuth}>
+            Login to Spotify
+          </button>
         ) : (
           <>
             <Link className={AppClasses.SecondaryButton} to={AppRoutes.Backup}>
