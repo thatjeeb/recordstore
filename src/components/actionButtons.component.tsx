@@ -14,6 +14,10 @@ export function GoHomeButton(): ReactNode {
 }
 
 export function ViewLibraryButton(): ReactNode {
+  const { dataCount } = useSpotifyData();
+
+  if (dataCount === 0) return;
+
   return (
     <Link className={AppClasses.SecondaryButton} to={AppRoutes.Library}>
       View Library

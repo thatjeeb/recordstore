@@ -12,7 +12,7 @@ export const Home = (): ReactNode => {
   return (
     <div>
       <p>
-        You&apos;ve spent lots of time curating your playilsts and saving albums on Spotify. But all those songs sit in only one place: Spotify. What if Spotify
+        You&apos;ve spent lots of time curating your playlists and saving albums on Spotify. But all those songs sit in only one place: Spotify. What if Spotify
         goes down, or you lose access to your account?
       </p>
 
