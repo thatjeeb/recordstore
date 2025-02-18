@@ -9,8 +9,6 @@ export const spotifyConsts = {
   expiryDateStorageKey: "recordStoreSpotifyExpiryDate",
 };
 
-console.log("penv", process.env.REDIRECT_URI_BASE);
-
 export const spotifyUrls = {
   auth: "https://accounts.spotify.com/authorize",
   token: "https://accounts.spotify.com/api/token",
