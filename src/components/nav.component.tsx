@@ -9,9 +9,9 @@ export function Nav(): ReactNode {
   const navigate = useNavigate();
   const { pathname } = useLocation();
   const { loggedIn, deleteAuthTokens: deleteTokens } = useSpotifyAuth();
-  const { dataCount } = useSpotifyData();
+  const { loading, dataCount } = useSpotifyData();
 
-  if (!loggedIn) return null;
+  if (!loggedIn || loading) return null;
 
   function logout(): void {
     deleteTokens();
