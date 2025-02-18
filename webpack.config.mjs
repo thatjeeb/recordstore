@@ -41,8 +41,6 @@ export default {
     }),
   ],
   devServer: {
-    historyApiFallback: {
-      index: process.env.PUBLIC_PATH + "index.html"
-    },
+    historyApiFallback: true,
   },
 };
