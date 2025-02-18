@@ -16,7 +16,7 @@ export function GoHomeButton(): ReactNode {
 export function ViewLibraryButton(): ReactNode {
   const { dataCount } = useSpotifyData();
 
-  if (dataCount === 0) return;
+  if (!dataCount) return;
 
   return (
     <Link className={AppClasses.SecondaryButton} to={AppRoutes.Library}>
@@ -28,7 +28,7 @@ export function ViewLibraryButton(): ReactNode {
 export function DownloadDataButton(): ReactNode {
   const { dataCount, downloadData } = useSpotifyData();
 
-  if (dataCount === 0) return;
+  if (!dataCount) return;
 
   return (
     <button className={AppClasses.PrimaryButton} onClick={downloadData}>

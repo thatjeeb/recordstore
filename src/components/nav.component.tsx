@@ -1,7 +1,7 @@
 import React, { useState, type ReactNode } from "react";
 import { NavLink, useLocation, useNavigate } from "react-router";
 import { AppRoutes } from "../app.definitions";
-import { useSpotifyAuth } from "../lib";
+import { useSpotifyAuth, useSpotifyData } from "../lib";
 import { AppClasses } from "../styles/appClasses";
 
 export function Nav(): ReactNode {
@@ -9,6 +9,7 @@ export function Nav(): ReactNode {
   const navigate = useNavigate();
   const { pathname } = useLocation();
   const { loggedIn, deleteAuthTokens: deleteTokens } = useSpotifyAuth();
+  const { dataCount } = useSpotifyData();
 
   if (!loggedIn) return null;
 
@@ -39,9 +40,11 @@ export function Nav(): ReactNode {
         <NavLink to={AppRoutes.Backup} className={AppClasses.NavBarLink} onClick={toggleShowMobileNav}>
           Backup
         </NavLink>
-        <NavLink to={AppRoutes.Library} className={AppClasses.NavBarLink} onClick={toggleShowMobileNav}>
-          Library
-        </NavLink>
+        {!!dataCount && (
+          <NavLink to={AppRoutes.Library} className={AppClasses.NavBarLink} onClick={toggleShowMobileNav}>
+            Library
+          </NavLink>
+        )}
       </nav>
 
       <nav className={secondaryNavClassName}>
