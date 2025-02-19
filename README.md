@@ -33,7 +33,7 @@ PUBLIC_PATH="/"
 REDIRECT_URI_BASE="http://127.0.0.1:8080"
 ```
 
-`<your_client_id>` is found in your Spotify Web App's settings. Instructions on how to do obtain this can be found in step 2.5.
+`<your_client_id>` is found in your Spotify Web App's settings. Instructions on how to do obtain this can be found in step 2.iii.
 
 4. Record Store is now ready to run locally. From the project root, run `npm start`.
 
