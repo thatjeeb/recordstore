@@ -47,14 +47,16 @@ export function Nav(): ReactNode {
         )}
       </nav>
 
-      <nav className={secondaryNavClassName}>
-        <NavLink to={AppRoutes.PlaylistList} className={AppClasses.NavBarLink} onClick={toggleShowMobileNav}>
-          Playlists
-        </NavLink>
-        <NavLink to={AppRoutes.AlbumList} className={AppClasses.NavBarLink} onClick={toggleShowMobileNav}>
-          Albums
-        </NavLink>
-      </nav>
+      {!!dataCount && (
+        <nav className={secondaryNavClassName}>
+          <NavLink to={AppRoutes.PlaylistList} className={AppClasses.NavBarLink} onClick={toggleShowMobileNav}>
+            Playlists
+          </NavLink>
+          <NavLink to={AppRoutes.AlbumList} className={AppClasses.NavBarLink} onClick={toggleShowMobileNav}>
+            Albums
+          </NavLink>
+        </nav>
+      )}
 
       <nav className={logoutBarName}>
         <button onClick={logout} className={AppClasses.NavBarLink}>
