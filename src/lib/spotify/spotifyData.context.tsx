@@ -40,13 +40,15 @@ export const SpotifyDataProvider = ({ children }: { children: ReactNode }): Reac
     return (): void => window.removeEventListener("beforeunload", handleBeforeUnload);
   }, [loading]);
 
-  useEffect(() => {
-    (async (): Promise<void> => {
-      const playlistCount = await DBLib.count(StoreName.Playlist);
-      const albumCount = await DBLib.count(StoreName.Album);
-      setDataCount(playlistCount + albumCount);
-    })();
+  const getDataCount = useCallback(async () => {
+    const playlistCount = await DBLib.count(StoreName.Playlist);
+    const albumCount = await DBLib.count(StoreName.Album);
+    setDataCount(playlistCount + albumCount);
   }, []);
+
+  useEffect(() => {
+    getDataCount();
+  }, [getDataCount]);
 
   // Methods
   const clearCompletes = useCallback(() => {
@@ -116,8 +118,9 @@ export const SpotifyDataProvider = ({ children }: { children: ReactNode }): Reac
     await backupPlaylists();
     await backupPlaylistTracks();
     await backupAlbums();
+    await getDataCount();
     setBackupComplete(true);
-  }, [backupAlbums, backupPlaylistTracks, backupPlaylists]);
+  }, [backupAlbums, backupPlaylistTracks, backupPlaylists, getDataCount]);
 
   const refreshBackup = useCallback(async () => {
     setLoading(true);
