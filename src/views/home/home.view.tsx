@@ -4,13 +4,15 @@ import { Link } from "react-router";
 import { AppRoutes } from "../../app.definitions";
 import { AppLanguage } from "../../app.language";
 import { useSpotifyAuth } from "../../lib";
-import { DownloadDataButton, ViewLibraryButton } from "../../components";
+import { DownloadDataButton, InviteWarning, ViewLibraryButton } from "../../components";
 
 export const Home = (): ReactNode => {
   const { loggedIn, goToSpotifyAuth } = useSpotifyAuth();
 
   return (
     <div>
+      <InviteWarning />
+
       <p>
         You&apos;ve spent lots of time curating your playlists and saving albums on Spotify. But all those songs sit in only one place: Spotify. What if Spotify
         goes down, or you lose access to your account?
@@ -19,14 +21,15 @@ export const Home = (): ReactNode => {
       <p>Enter: Record Store.</p>
 
       <p>
-        Record Store is a tool to help you backup your Spotify data, so you have a copy of every song you&apos;ve saved and every playlist you&apos;ve created.
+        Record Store is a tool to get a text based backup of your Spotify data, so you have the names of every album you&apos;ve saved and the names of all your
+        songs in all your playlists.
       </p>
 
-      <p>{loggedIn ? "You can:" : <span> Begin by logging in to your spotify account, and then you can:</span>}</p>
+      <p>{loggedIn ? "You can:" : <span>Begin by logging in to your spotify account, and then you can:</span>}</p>
 
       <ul>
-        <li>Backup your music</li>
-        <li>View the backed up playlists and albums</li>
+        <li>Get a text based backup of your playlists and albums</li>
+        <li>View a library of your backed up data</li>
         <li>Download a text file with all your data</li>
       </ul>
 

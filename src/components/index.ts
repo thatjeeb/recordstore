@@ -5,3 +5,4 @@ export * from "./loader.component";
 export * from "./nav.component";
 export * from "./playlistItem.component";
 export * from "./icons.component";
+export * from "./inviteWarning.component";
