@@ -24,40 +24,16 @@
       // https://username.github.io/repo-name/one/two?a=b&c=d#qwe becomes
       // https://username.github.io/repo-name/?/one/two&a=b~and~c=d#qwe
       // Otherwise, leave pathSegmentsToKeep as 0.
-
-      // Note:
-      // This script has been modified slightly from the original provided by rafgraph to
-      // lowercase the origin and pathname sections of the URL.
-
-      // Original rafgraph code commented below:
-      //
-      // var pathSegmentsToKeep = 1;
-      // var l = window.location;
-      // l.replace(
-      //   l.protocol + '//' + l.hostname + (l.port ? ':' + l.port : '') +
-      //   l.pathname.split('/').slice(0, 1 + pathSegmentsToKeep).join('/') + '/?/' +
-      //   l.pathname.slice(1).split('/').slice(pathSegmentsToKeep).join('/').replace(/&/g, '~and~') +
-      //   (l.search ? '&' + l.search.slice(1).replace(/&/g, '~and~') : '') +
-      //   l.hash
-      // );
-
-      // Rewritten code for lowercasing:
       (function () {
         const pathSegmentsToKeep = 1;
         const l = window.location;
-
-        const replacementUrlFirstPart = l.protocol + '//' + l.hostname + (l.port ? ':' + l.port : '') +
-        l.pathname.split('/').slice(0, 1 + pathSegmentsToKeep).join('/') + '/?/' +
-        l.pathname.slice(1).split('/').slice(pathSegmentsToKeep).join('/').replace(/&/g, '~and~');
-
-        // const firstPartLowerCase = replacementUrlFirstPart.toLowerCase();
-
-        const replacementUrlSecondPart = (l.search ? '&' + l.search.slice(1).replace(/&/g, '~and~') : '') + l.hash;
-
-        const replacementUrl = replacementUrlFirstPart + replacementUrlSecondPart;
-        console.log(replacementUrl);
-
-        l.replace(replacementUrl);
+        l.replace(
+          l.protocol + '//' + l.hostname + (l.port ? ':' + l.port : '') +
+          l.pathname.split('/').slice(0, 1 + pathSegmentsToKeep).join('/') + '/?/' +
+          l.pathname.slice(1).split('/').slice(pathSegmentsToKeep).join('/').replace(/&/g, '~and~') +
+          (l.search ? '&' + l.search.slice(1).replace(/&/g, '~and~') : '') +
+          l.hash
+        );
       })();
     </script>
   </head>
