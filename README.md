@@ -8,19 +8,19 @@ An app to obtain a text based backup of your Spotify Playlists and Albums.
 
 2. Next you need to create an app and get a client ID for use with the Spotify Web API.
 
-    1. These steps are abridged from Spotify Web API's [getting started guide](https://developer.spotify.com/documentation/web-api/tutorials/getting-started).
+    - These steps are abridged from Spotify Web API's [getting started guide](https://developer.spotify.com/documentation/web-api/tutorials/getting-started).
 
-    2. These steps assume you already have a Spotify account (free or premium).
+    - These steps assume you already have a Spotify account (free or premium).
 
-    3. Login to the [Spotify Developer Dashboard](https://developer.spotify.com/dashboard). If necessary, read the latest Developer Terms of Service to complete your account set up.
+    1. Login to the [Spotify Developer Dashboard](https://developer.spotify.com/dashboard). If necessary, read the latest Developer Terms of Service to complete your account set up.
 
-    4. On the dashboard, click on the _Create app_ button and enter the following information:
+    2. On the dashboard, click on the _Create app_ button and enter the following information:
 
         - **App Name**: Record Store _(this could be anything)_
         - **App Description**: _(This can also be anything)_
-        - **Redirect URI**: http://127.0.0.1:8080
+        - **Redirect URI**: http://127.0.0.1:8080/callback
 
-    5. Get your newly created app's Client ID:
+    3. Get your newly created app's Client ID:
         1. On the dashboard, click on the name of your newly created app.
         2. Click the _Settings_ button.
         3. It should display the Client ID on this page. You will need this in the next step.
