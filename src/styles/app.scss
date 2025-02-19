@@ -3,37 +3,9 @@
 @use "views";
 @use "components";
 
-@keyframes gradient {
-  0% {
-    background-position: 0% 50%;
-  }
-  50% {
-    background-position: 100% 50%;
-  }
-  100% {
-    background-position: 0% 50%;
-  }
-}
-
 .record-store-app {
   background: var(--spotifyBlack);
   min-height: 100vh;
-
-  &_header {
-    display: flex;
-    align-items: center;
-
-    color: var(--spotifyCharcoal);
-    background: linear-gradient(-45deg, #ee7752, #e73c7e, #d5a823, #23d5ab);
-    background-size: 400% 400%;
-    animation: gradient 30s ease infinite;
-
-    letter-spacing: 1px;
-    font-size: 2rem;
-    font-weight: 900;
-    padding: 20px var(--gutterWidth);
-    height: 150px;
-  }
 
   &_content {
     padding: 20px var(--gutterWidth);

@@ -9,7 +9,7 @@ export function InviteWarning(): ReactNode {
         This app is currently in invite only mode. 
         <br />
         The developer will need to add your spotify email address before you can begin using it.
-        You can login, but trying to backup won&apos;t work unless you&apos;ve been given access. Please contact the developer to be invited.
+        You will be able to backup once your spotify email has been added.
       </p>
     );
   }

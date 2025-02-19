@@ -20,12 +20,7 @@ export const Home = (): ReactNode => {
 
       <p>Enter: Record Store.</p>
 
-      <p>
-        Record Store is a tool to get a text based backup of your Spotify data, so you have the names of every album you&apos;ve saved and the names of all your
-        songs in all your playlists.
-      </p>
-
-      <p>{loggedIn ? "You can:" : <span>Begin by logging in to your spotify account, and then you can:</span>}</p>
+      <p>{loggedIn ? "With Record Store you can:" : <span>Begin by logging in to your spotify account, and then with Record Store you can:</span>}</p>
 
       <ul>
         <li>Get a text based backup of your playlists and albums</li>

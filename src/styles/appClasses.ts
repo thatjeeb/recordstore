@@ -6,10 +6,10 @@ const playlistDetailViewClass = "record-store-playlist-detail";
 
 export enum AppClasses {
   App = appRootClass,
-  Header = `${appRootClass}_header`,
   Content = `${appRootClass}_content`,
 
   // Components
+  Header = `${appRootClass}_header`,
   SmallPrint = `${appRootClass}_small-print`,
 
   /// Buttons

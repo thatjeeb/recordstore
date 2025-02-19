@@ -3,7 +3,7 @@ import { AppClasses } from "./styles/appClasses";
 import React, { useEffect, useRef, type ReactNode } from "react";
 import { BrowserRouter, Routes, Route, Navigate } from "react-router";
 import { AlbumList, Backup, Callback, Home, NotFound, PlaylistDetail, PlaylistList } from "./views";
-import { Nav } from "./components";
+import { Header, Nav } from "./components";
 import { DBLib, useSpotifyAuth } from "./lib";
 import { AppRoutes } from "./app.definitions";
 
@@ -34,8 +34,8 @@ function App(): ReactNode {
 
   return (
     <div className={AppClasses.App}>
-      <div className={AppClasses.Header}>Record Store</div>
       <BrowserRouter basename={process.env.PUBLIC_PATH}>
+        <Header />
         <Nav />
         <div className={AppClasses.Content}>
           <Routes>
