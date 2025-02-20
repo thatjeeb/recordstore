@@ -220,32 +220,32 @@ export const SpotifyDataProvider = ({ children }: { children: ReactNode }): Reac
     try {
       const playlists = await DBLib.getAllItems<PlaylistCore>(StoreName.Playlist);
       const albums = await DBLib.getAllItems<AlbumCore>(StoreName.Album);
-  
+
       const { usersPlaylists, followedPlaylists } = sortAndSplitPlaylists(playlists, spotifyUserId);
       const sortedAlbums = sortAlbumsByArtistsName(albums);
-  
+
       let dataStr = "";
-  
+
       // if (!playlists.length) {
       //   dataStr += "\nNo playlists found.";
       // }
-  
+
       // for (const playlist of playlists) {
       //   dataStr += `\n\n- ${playlist.name} -`;
-  
+
       //   for (const tracks of playlist.tracks) {
       //     dataStr += `\n${tracks.name} - ${getArtistsNameString(tracks.artists)}`;
       //   }
       // }
-  
+
       dataStr += convertPlaylistsToDownloadString(usersPlaylists, "-- Your Playlists --");
-  
+
       dataStr += convertPlaylistsToDownloadString(followedPlaylists, "-- Playlists You Follow --");
-  
+
       dataStr += convertAlbumsToDownloadString(sortedAlbums, "-- Your Albums --");
-  
+
       const { year, month, day } = getDayMonthYear();
-  
+
       downloadTextToFile(dataStr, `spotify_data_${year}_${month}_${day}.txt`);
     } catch (error) {
       console.error("DownloadData error", error);

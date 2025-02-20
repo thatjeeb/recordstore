@@ -1,4 +1,8 @@
-import React, { type ReactNode, type ChangeEvent, useEffect } from "react";
+import React, {
+  useEffect,
+  type ReactNode,
+  // type ChangeEvent,
+} from "react";
 import { AppClasses } from "../../styles/appClasses";
 import { useSpotifyData } from "../../lib";
 import { DownloadDataButton, GoHomeButton, Loader, ViewLibraryButton } from "../../components";
@@ -23,17 +27,17 @@ export function Backup(): ReactNode {
     askForDeleteConfirm,
     deleteBackup,
     cancelDelete,
-    uploadData,
+    // uploadData,
   } = useSpotifyData();
 
   useEffect(() => {
     return (): void => clearCompletes();
   }, [clearCompletes]);
 
-  async function handleFileChange(event: ChangeEvent<HTMLInputElement>): Promise<void> {
-    const file = event.target.files?.[0];
-    uploadData(file);
-  }
+  // async function handleFileChange(event: ChangeEvent<HTMLInputElement>): Promise<void> {
+  //   const file = event.target.files?.[0];
+  //   uploadData(file);
+  // }
 
   if (loading) {
     return (
