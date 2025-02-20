@@ -172,4 +172,21 @@ export const sortAlbumsByArtistsName = (albums: AlbumCore[]): AlbumCore[] => {
     return artistsA.localeCompare(artistsB);
   });
 };
+
+export const sortAndSplitPlaylists = (playlists: PlaylistCore[], spotifyUserId: string): { usersPlaylists: PlaylistCore[]; followedPlaylists: PlaylistCore[] } => {
+  const sortedPlaylists = sortPlaylistsByName(playlists);
+
+  const usersPlaylists: PlaylistCore[] = [];
+  const followedPlaylists: PlaylistCore[] = [];
+
+  sortedPlaylists.forEach((p) => {
+    if (p.owner.id === spotifyUserId) {
+      usersPlaylists.push(p);
+    } else {
+      followedPlaylists.push(p);
+    }
+  });
+
+  return { usersPlaylists, followedPlaylists };
+};
 // #endregion

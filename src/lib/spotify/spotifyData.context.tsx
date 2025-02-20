@@ -1,5 +1,5 @@
 import React, { createContext, useCallback, useContext, useState, useEffect, type ReactNode } from "react";
-import { downloadJsonToFile } from "../../utils";
+import { downloadJsonToFile, getDayMonthYear } from "../../utils";
 import { DBLib, StoreName } from "../db";
 import type { AlbumCore, PlaylistCore, SpotifyDataContextResponse } from "./spotify.definition";
 import {
@@ -203,10 +203,7 @@ export const SpotifyDataProvider = ({ children }: { children: ReactNode }): Reac
         albums,
       };
 
-      const date = new Date();
-      const day = date.getDate();
-      const month = date.getMonth() + 1;
-      const year = date.getFullYear();
+      const { day, month, year } = getDayMonthYear();
 
       downloadJsonToFile(allData, `spotify_data_${year}_${month}_${day}.json`);
     } catch (error) {

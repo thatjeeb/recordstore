@@ -1,7 +1,6 @@
 import React, { useEffect, useState, type ReactNode } from "react";
-import { PlaylistCore, DBLib, StoreName, useSpotifyAuth } from "../../../lib";
+import { DBLib, StoreName, useSpotifyAuth, sortAndSplitPlaylists, type PlaylistCore } from "../../../lib";
 import { Loader, PlaylistItem } from "../../../components";
-import { sortPlaylistsByName } from "../../../lib";
 import { AppClasses } from "../../../styles/appClasses";
 
 export function PlaylistList(): ReactNode {
@@ -16,21 +15,10 @@ export function PlaylistList(): ReactNode {
 
       try {
         const playlists = (await DBLib.getAllItems<PlaylistCore>(StoreName.Playlist)) as PlaylistCore[];
-        const sortedPlaylists = sortPlaylistsByName(playlists);
+        const { usersPlaylists, followedPlaylists } = sortAndSplitPlaylists(playlists, spotifyUserId);
 
-        const dbUsersPlaylists: PlaylistCore[] = [];
-        const dbFollowedPlaylists: PlaylistCore[] = [];
-
-        sortedPlaylists.forEach((p) => {
-          if (p.owner.id === spotifyUserId) {
-            dbUsersPlaylists.push(p);
-          } else {
-            dbFollowedPlaylists.push(p);
-          }
-        });
-
-        setUsersPlaylists(dbUsersPlaylists);
-        setFollowedPlaylists(dbFollowedPlaylists);
+        setUsersPlaylists(usersPlaylists);
+        setFollowedPlaylists(followedPlaylists);
       } catch (error) {
         console.error(error);
       } finally {

@@ -25,7 +25,7 @@ const base64encode = (input: ArrayBuffer): string => {
   });
 };
 
-export async function getCodeChallenge(codeVerifier: string): Promise<string> {
+export const getCodeChallenge = async (codeVerifier: string): Promise<string> => {
   const hashed = await hasher(codeVerifier);
   return base64encode(hashed);
-}
+};
