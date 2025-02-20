@@ -114,13 +114,17 @@ export const SpotifyDataProvider = ({ children }: { children: ReactNode }): Reac
     }
   }, []);
 
+  const postBackupProcess = useCallback(async () => {
+    await getDataCount();
+    setBackupComplete(true);
+  }, [getDataCount]);
+
   const performBackup = useCallback(async () => {
     await backupPlaylists();
     await backupPlaylistTracks();
     await backupAlbums();
-    await getDataCount();
-    setBackupComplete(true);
-  }, [backupAlbums, backupPlaylistTracks, backupPlaylists, getDataCount]);
+    await postBackupProcess();
+  }, [backupAlbums, backupPlaylistTracks, backupPlaylists, postBackupProcess]);
 
   const refreshBackup = useCallback(async () => {
     setLoading(true);
@@ -155,13 +159,13 @@ export const SpotifyDataProvider = ({ children }: { children: ReactNode }): Reac
 
       await backupPlaylistTracks();
 
-      setBackupComplete(true);
+      await postBackupProcess();
     } catch (error) {
       console.error("RefreshBackup error", error);
     } finally {
       setLoading(false);
     }
-  }, [backupPlaylistTracks]);
+  }, [backupPlaylistTracks, postBackupProcess]);
 
   /// Delete Items
   const askForDeleteConfirm = useCallback(async () => {
