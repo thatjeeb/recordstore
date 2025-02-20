@@ -3,7 +3,7 @@ import type { ReactNode } from "react";
 import { Link } from "react-router";
 import { AppClasses } from "../styles/appClasses";
 import { AppRoutes } from "../app.definitions";
-import { useSpotifyData } from "../lib";
+import { useSpotifyAuth, useSpotifyData } from "../lib";
 
 export function GoHomeButton(): ReactNode {
   return (
@@ -25,13 +25,26 @@ export function ViewLibraryButton(): ReactNode {
   );
 }
 
+// export function DownloadDataButton(): ReactNode {
+//   const { dataCount, downloadDataAsJson } = useSpotifyData();
+
+//   if (!dataCount) return;
+
+//   return (
+//     <button className={AppClasses.PrimaryButton} onClick={downloadDataAsJson}>
+//       Download Your Data
+//     </button>
+//   );
+// }
+
 export function DownloadDataButton(): ReactNode {
-  const { dataCount, downloadData } = useSpotifyData();
+  const { spotifyUserId } = useSpotifyAuth();
+  const { dataCount, downloadDataAsTxt } = useSpotifyData();
 
   if (!dataCount) return;
 
   return (
-    <button className={AppClasses.PrimaryButton} onClick={downloadData}>
+    <button className={AppClasses.PrimaryButton} onClick={() => downloadDataAsTxt(spotifyUserId)}>
       Download Your Data
     </button>
   );

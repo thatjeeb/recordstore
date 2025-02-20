@@ -1,5 +1,5 @@
 import React, { createContext, useCallback, useContext, useState, useEffect, type ReactNode } from "react";
-import { downloadJsonToFile, getDayMonthYear } from "../../utils";
+import { convertAlbumsToDownloadString, convertPlaylistsToDownloadString, downloadJsonToFile, downloadTextToFile, getDayMonthYear } from "../../utils";
 import { DBLib, StoreName } from "../db";
 import type { AlbumCore, PlaylistCore, SpotifyDataContextResponse } from "./spotify.definition";
 import {
@@ -9,6 +9,8 @@ import {
   convertPlaylistTrackToTrackCore,
   fetchUsersAlbums,
   convertAlbumToCore,
+  sortAlbumsByArtistsName,
+  sortAndSplitPlaylists,
 } from "./spotify.utils";
 
 const SpotifyDataContext = createContext<SpotifyDataContextResponse | undefined>(undefined);
@@ -193,7 +195,7 @@ export const SpotifyDataProvider = ({ children }: { children: ReactNode }): Reac
   }, []);
 
   /// File Store
-  const downloadData = useCallback(async () => {
+  const downloadDataAsJson = useCallback(async () => {
     setLoading(true);
     try {
       const playlists = await DBLib.getAllItems<PlaylistCore>(StoreName.Playlist);
@@ -206,6 +208,45 @@ export const SpotifyDataProvider = ({ children }: { children: ReactNode }): Reac
       const { day, month, year } = getDayMonthYear();
 
       downloadJsonToFile(allData, `spotify_data_${year}_${month}_${day}.json`);
+    } catch (error) {
+      console.error("DownloadData error", error);
+    } finally {
+      setLoading(false);
+    }
+  }, []);
+
+  const downloadDataAsTxt = useCallback(async (spotifyUserId: string) => {
+    setLoading(true);
+    try {
+      const playlists = await DBLib.getAllItems<PlaylistCore>(StoreName.Playlist);
+      const albums = await DBLib.getAllItems<AlbumCore>(StoreName.Album);
+  
+      const { usersPlaylists, followedPlaylists } = sortAndSplitPlaylists(playlists, spotifyUserId);
+      const sortedAlbums = sortAlbumsByArtistsName(albums);
+  
+      let dataStr = "";
+  
+      // if (!playlists.length) {
+      //   dataStr += "\nNo playlists found.";
+      // }
+  
+      // for (const playlist of playlists) {
+      //   dataStr += `\n\n- ${playlist.name} -`;
+  
+      //   for (const tracks of playlist.tracks) {
+      //     dataStr += `\n${tracks.name} - ${getArtistsNameString(tracks.artists)}`;
+      //   }
+      // }
+  
+      dataStr += convertPlaylistsToDownloadString(usersPlaylists, "-- Your Playlists --");
+  
+      dataStr += convertPlaylistsToDownloadString(followedPlaylists, "-- Playlists You Follow --");
+  
+      dataStr += convertAlbumsToDownloadString(sortedAlbums, "-- Your Albums --");
+  
+      const { year, month, day } = getDayMonthYear();
+  
+      downloadTextToFile(dataStr, `spotify_data_${year}_${month}_${day}.txt`);
     } catch (error) {
       console.error("DownloadData error", error);
     } finally {
@@ -264,7 +305,8 @@ export const SpotifyDataProvider = ({ children }: { children: ReactNode }): Reac
         askForDeleteConfirm,
         deleteBackup,
         cancelDelete,
-        downloadData,
+        downloadDataAsJson,
+        downloadDataAsTxt,
         uploadData,
       }}
     >

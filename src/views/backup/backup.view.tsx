@@ -141,10 +141,10 @@ export function Backup(): ReactNode {
           Backup Your Data
         </button>
 
-        <label className={AppClasses.SecondaryButton}>
+        {/* <label className={AppClasses.SecondaryButton}>
           Upload Your Backup From File
           <input className={AppClasses.BackupFileInput} type="file" accept=".json" onChange={handleFileChange} />
-        </label>
+        </label> */}
       </div>
     </BackupWrapper>
   );
