@@ -2,7 +2,7 @@ import "./styles/app.scss";
 import { AppClasses } from "./styles/appClasses";
 import React, { useEffect, useRef, type ReactNode } from "react";
 import { BrowserRouter, Routes, Route, Navigate } from "react-router";
-import { AlbumList, Backup, Callback, Home, NotFound, PlaylistDetail, PlaylistList } from "./views";
+import { AlbumList, Backup, Callback, Download, Home, NotFound, PlaylistDetail, PlaylistList } from "./views";
 import { Header, Nav } from "./components";
 import { DBLib, useSpotifyAuth } from "./lib";
 import { AppRoutes } from "./app.definitions";
@@ -48,6 +48,7 @@ function App(): ReactNode {
               <Route path={AppRoutes.PlaylistsDetail} element={<PlaylistDetail />} />
               <Route path={AppRoutes.AlbumList} element={<AlbumList />} />
             </Route>
+            <Route path={AppRoutes.Download} element={<Download />} />
             <Route path="*" element={<NotFound />} />
           </Routes>
         </div>

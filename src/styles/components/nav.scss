@@ -11,20 +11,24 @@
     display: flex;
     flex-wrap: wrap;
     align-items: stretch;
+
+    padding: 0 var(--gutterWidth);
+
     background: var(--spotifyBlack);
+    box-shadow: rgba(0, 0, 0, 0.16) 0px 3px 6px, rgba(0, 0, 0, 0.23) 0px 3px 6px;
 
     @include mobile-breakpoint {
       position: fixed;
-
-      flex-direction: column;
-      flex-wrap: nowrap;
-
-      padding: var(--gutterWidth) 0;
-      gap: 15px;
       top: 0;
       left: -100vw;
       width: 100vw;
       height: 100vh;
+
+      flex-direction: column;
+      flex-wrap: nowrap;
+      gap: 15px;
+
+      padding: var(--gutterWidth);
 
       transition: var(--defaultTransition);
 
@@ -41,12 +45,8 @@
     flex-grow: 1;
     gap: 20px;
     height: var(--navRowHeight);
-    padding: 0 var(--gutterWidth);
 
     background: var(--spotifyBlack);
-
-    box-shadow: rgba(0, 0, 0, 0.16) 0px 3px 6px, rgba(0, 0, 0, 0.23) 0px 3px 6px;
-    clip-path: inset(-5px 0px); // clip box shadow from appearing on sides of element
 
     &-link {
       cursor: pointer;

@@ -6,4 +6,5 @@ export enum AppRoutes {
   AlbumList = AppRoutes.Library + "/albums",
   PlaylistList = AppRoutes.Library + "/playlists",
   PlaylistsDetail = AppRoutes.PlaylistList + "/:playlistId",
+  Download = "/download",
 }

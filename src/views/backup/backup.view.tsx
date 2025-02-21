@@ -1,12 +1,9 @@
-import React, {
-  useEffect,
-  type ReactNode,
-  // type ChangeEvent,
-} from "react";
+import React, { useEffect, type ReactNode, type ChangeEvent } from "react";
 import { AppClasses } from "../../styles/appClasses";
 import { useSpotifyData } from "../../lib";
-import { DownloadDataButton, GoHomeButton, Loader, ViewLibraryButton } from "../../components";
+import { GoToDownloadButton, GoHomeButton, Loader, GoToLibraryButton } from "../../components";
 import { AppLanguage } from "../../app.language";
+import { isLocalHost } from "../../utils";
 
 function BackupWrapper({ children }: { children: ReactNode }): ReactNode {
   return <div className={AppClasses.BackupDetailView}>{children}</div>;
@@ -27,17 +24,17 @@ export function Backup(): ReactNode {
     askForDeleteConfirm,
     deleteBackup,
     cancelDelete,
-    // uploadData,
+    uploadData,
   } = useSpotifyData();
 
   useEffect(() => {
     return (): void => clearCompletes();
   }, [clearCompletes]);
 
-  // async function handleFileChange(event: ChangeEvent<HTMLInputElement>): Promise<void> {
-  //   const file = event.target.files?.[0];
-  //   uploadData(file);
-  // }
+  async function handleFileChange(event: ChangeEvent<HTMLInputElement>): Promise<void> {
+    const file = event.target.files?.[0];
+    uploadData(file);
+  }
 
   if (loading) {
     return (
@@ -90,9 +87,9 @@ export function Backup(): ReactNode {
         <p className={AppClasses.SmallPrint}>{AppLanguage.StorageWarning}</p>
 
         <div className={AppClasses.ButtonRow}>
-          <ViewLibraryButton />
+          <GoToLibraryButton />
 
-          {backupComplete && <DownloadDataButton />}
+          <GoToDownloadButton />
         </div>
       </BackupWrapper>
     );
@@ -124,7 +121,7 @@ export function Backup(): ReactNode {
             Refresh Your Data
           </button>
 
-          <DownloadDataButton />
+          <GoToDownloadButton />
 
           <button key="start-delete-button" className={AppClasses.SecondaryButton} onClick={askForDeleteConfirm}>
             Delete Your Data

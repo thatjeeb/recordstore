@@ -16,11 +16,15 @@ export function Nav(): ReactNode {
   function logout(): void {
     deleteTokens();
     navigate(AppRoutes.Home);
-    toggleShowMobileNav();
+    hideMobileNav();
   }
 
   function toggleShowMobileNav(): void {
     setMobileNavVisible((x) => !x);
+  }
+
+  function hideMobileNav(): void {
+    setMobileNavVisible(false);
   }
 
   const isLibraryPath = pathname.includes(AppRoutes.Library);
@@ -33,26 +37,31 @@ export function Nav(): ReactNode {
 
   return (
     <div className={navWrapperClassName}>
-      <nav className={navClassName}>
-        <NavLink to={AppRoutes.Home} className={AppClasses.NavBarLink} onClick={toggleShowMobileNav}>
+      <nav className={navClassName} onClick={hideMobileNav}>
+        <NavLink to={AppRoutes.Home} className={AppClasses.NavBarLink}>
           Home
         </NavLink>
-        <NavLink to={AppRoutes.Backup} className={AppClasses.NavBarLink} onClick={toggleShowMobileNav}>
+        <NavLink to={AppRoutes.Backup} className={AppClasses.NavBarLink}>
           Backup
         </NavLink>
         {!!dataCount && (
-          <NavLink to={AppRoutes.Library} className={AppClasses.NavBarLink} onClick={toggleShowMobileNav}>
-            Library
-          </NavLink>
+          <>
+            <NavLink to={AppRoutes.Download} className={AppClasses.NavBarLink}>
+              Download
+            </NavLink>
+            <NavLink to={AppRoutes.Library} className={AppClasses.NavBarLink}>
+              Library
+            </NavLink>
+          </>
         )}
       </nav>
 
       {!!dataCount && (
-        <nav className={secondaryNavClassName}>
-          <NavLink to={AppRoutes.PlaylistList} className={AppClasses.NavBarLink} onClick={toggleShowMobileNav}>
+        <nav className={secondaryNavClassName} onClick={hideMobileNav}>
+          <NavLink to={AppRoutes.PlaylistList} className={AppClasses.NavBarLink}>
             Playlists
           </NavLink>
-          <NavLink to={AppRoutes.AlbumList} className={AppClasses.NavBarLink} onClick={toggleShowMobileNav}>
+          <NavLink to={AppRoutes.AlbumList} className={AppClasses.NavBarLink}>
             Albums
           </NavLink>
         </nav>

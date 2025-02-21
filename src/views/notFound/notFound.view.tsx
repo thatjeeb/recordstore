@@ -5,7 +5,7 @@ import { Link } from "react-router";
 
 export function NotFound(): ReactNode {
   return (
-    <div className={AppClasses.App}>
+    <div>
       <h2>Page not found!</h2>
       <Link className={AppClasses.SecondaryButton} to={AppRoutes.Home}>
         Go home
