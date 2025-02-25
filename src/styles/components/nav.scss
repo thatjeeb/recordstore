@@ -3,6 +3,8 @@
 
 .record-store-app {
   --navRowHeight: 65px;
+  --desktopGap: 20px;
+  --mobileGap: 15px;
 
   &_nav-wrapper {
     z-index: 2;
@@ -11,7 +13,6 @@
     display: flex;
     flex-wrap: wrap;
     align-items: stretch;
-
     padding: 0 var(--gutterWidth);
 
     background: var(--spotifyBlack);
@@ -26,8 +27,7 @@
 
       flex-direction: column;
       flex-wrap: nowrap;
-      gap: 15px;
-
+      gap: var(--mobileGap);
       padding: var(--gutterWidth);
 
       transition: var(--defaultTransition);
@@ -40,11 +40,11 @@
 
   &_nav-bar {
     z-index: 2;
+    height: var(--navRowHeight);
     display: flex;
     align-items: center;
-    flex-grow: 1;
-    gap: 20px;
-    height: var(--navRowHeight);
+    gap: var(--desktopGap);
+    padding-right: var(--desktopGap);
 
     background: var(--spotifyBlack);
 
@@ -65,14 +65,11 @@
     }
 
     @include mobile-breakpoint {
-      box-shadow: none;
       height: unset;
-      flex-grow: 0;
-
       flex-direction: column;
       align-items: flex-start;
-
-      gap: 15px;
+      gap: var(--mobileGap);
+      padding-right: 0;
 
       transition: var(--defaultTransition);
 
@@ -86,6 +83,7 @@
     z-index: 1;
     order: 2;
     width: 100%;
+
     transition: var(--defaultTransition);
 
     transform: translateY(calc(-1 * var(--navRowHeight)));
@@ -97,20 +95,16 @@
     }
 
     @include mobile-breakpoint {
-      z-index: 2;
-      transform: translate(20px, 0);
-      box-shadow: none;
+      order: 0;
+      transform: none;
+      margin: 0 0 0 var(--mobileGap);
     }
   }
 
   &_logout {
-    z-index: 2;
-    flex-grow: 0;
-
-    @include mobile-breakpoint {
-      order: 99;
-      margin-top: auto;
-    }
+    flex-grow: 1;
+    justify-content: end;
+    padding-right: 0;
   }
 
   &_nav-mobile-button {

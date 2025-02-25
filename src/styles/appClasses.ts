@@ -27,7 +27,6 @@ export enum AppClasses {
   NavWrapperOpen = `${appRootClass}_nav-wrapper--open`,
   NavWrapperShowSecondary = `${appRootClass}_nav-wrapper--show-secondary`,
   NavBar = `${appRootClass}_nav-bar`,
-  NavBarOpen = `${appRootClass}_nav-bar--open`,
   SecondaryNavBar = `${appRootClass}_secondary-nav-bar`,
   SecondaryNavBarOpen = `${appRootClass}_secondary-nav-bar--open`,
   NavBarLink = `${appRootClass}_nav-bar-link`,

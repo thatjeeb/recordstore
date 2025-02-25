@@ -30,7 +30,7 @@ export function Nav(): ReactNode {
   const isLibraryPath = pathname.includes(AppRoutes.Library);
 
   const navWrapperClassName = `${AppClasses.NavWrapper} ${mobileNavVisible ? AppClasses.NavWrapperOpen : ""}`;
-  const navClassName = `${AppClasses.NavBar} ${mobileNavVisible ? AppClasses.NavBarOpen : ""}`;
+  const navClassName = AppClasses.NavBar;
   const secondaryNavClassName = `${AppClasses.NavBar} ${AppClasses.SecondaryNavBar} ${isLibraryPath ? AppClasses.SecondaryNavBarOpen : ""}`;
   const logoutBarName = `${AppClasses.NavBar} ${AppClasses.Logout}`;
   const navButtonClassName = `${AppClasses.NavMobileButton} ${mobileNavVisible ? AppClasses.NavMobileButtonOpen : ""}`;
@@ -45,14 +45,9 @@ export function Nav(): ReactNode {
           Backup
         </NavLink>
         {!!dataCount && (
-          <>
-            <NavLink to={AppRoutes.Download} className={AppClasses.NavBarLink}>
-              Download
-            </NavLink>
-            <NavLink to={AppRoutes.Library} className={AppClasses.NavBarLink}>
-              Library
-            </NavLink>
-          </>
+          <NavLink to={AppRoutes.Library} className={AppClasses.NavBarLink}>
+            Library
+          </NavLink>
         )}
       </nav>
 
@@ -63,6 +58,14 @@ export function Nav(): ReactNode {
           </NavLink>
           <NavLink to={AppRoutes.AlbumList} className={AppClasses.NavBarLink}>
             Albums
+          </NavLink>
+        </nav>
+      )}
+
+      {!!dataCount && (
+        <nav className={navClassName} onClick={hideMobileNav}>
+          <NavLink to={AppRoutes.Download} className={AppClasses.NavBarLink}>
+            Download
           </NavLink>
         </nav>
       )}
