@@ -226,18 +226,6 @@ export const SpotifyDataProvider = ({ children }: { children: ReactNode }): Reac
 
       let dataStr = "";
 
-      // if (!playlists.length) {
-      //   dataStr += "\nNo playlists found.";
-      // }
-
-      // for (const playlist of playlists) {
-      //   dataStr += `\n\n- ${playlist.name} -`;
-
-      //   for (const tracks of playlist.tracks) {
-      //     dataStr += `\n${tracks.name} - ${getArtistsNameString(tracks.artists)}`;
-      //   }
-      // }
-
       dataStr += convertPlaylistsToDownloadString(usersPlaylists, "-- Your Playlists --");
 
       dataStr += convertPlaylistsToDownloadString(followedPlaylists, "-- Playlists You Follow --");
