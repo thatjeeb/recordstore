@@ -1,7 +1,7 @@
 import React, { createContext, useCallback, useContext, useState, useEffect, type ReactNode } from "react";
 import { convertAlbumsToDownloadString, convertPlaylistsToDownloadString, downloadJsonToFile, downloadTextToFile, getDayMonthYear } from "../../utils";
 import { DBLib, StoreName } from "../db";
-import type { AlbumCore, PlaylistCore, SpotifyDataContextResponse } from "./spotify.definition";
+import { SpotifyDataCtxStatus, type AlbumCore, type PlaylistCore, type SpotifyDataContextResponse } from "./spotify.definition";
 import {
   fetchUsersPlaylists,
   convertPlaylistToCore,
@@ -20,12 +20,7 @@ const SpotifyDataContext = createContext<SpotifyDataContextResponse | undefined>
  * It exists as a context instead of a classic hook so that the performing the backup persists throughout the whole app whilst it's happening.
  **/
 export const SpotifyDataProvider = ({ children }: { children: ReactNode }): ReactNode => {
-  const [loading, setLoading] = useState(false);
-  const [backupComplete, setBackupComplete] = useState(false);
-  const [uploadComplete, setUploadComplete] = useState(false);
-  const [uploadFailure, setUploadFailure] = useState(false);
-  const [deleteComplete, setDeleteComplete] = useState(false);
-  const [showDeleteConfirm, setShowDeleteConfirm] = useState(false);
+  const [status, setStatus] = useState(SpotifyDataCtxStatus.Init);
   const [dataCount, setDataCount] = useState(0);
 
   // Hooks
@@ -35,12 +30,12 @@ export const SpotifyDataProvider = ({ children }: { children: ReactNode }): Reac
       event.returnValue = "";
     };
 
-    if (loading) {
+    if (status === SpotifyDataCtxStatus.DataLoading || status === SpotifyDataCtxStatus.DownloadLoading) {
       window.addEventListener("beforeunload", handleBeforeUnload);
     }
 
     return (): void => window.removeEventListener("beforeunload", handleBeforeUnload);
-  }, [loading]);
+  }, [status]);
 
   const getDataCount = useCallback(async () => {
     const playlistCount = await DBLib.count(StoreName.Playlist);
@@ -53,17 +48,12 @@ export const SpotifyDataProvider = ({ children }: { children: ReactNode }): Reac
   }, [getDataCount]);
 
   // Methods
-  const clearCompletes = useCallback(() => {
-    setUploadComplete(false);
-    setDeleteComplete(false);
-    setBackupComplete(false);
-    setUploadFailure(false);
+  const resetToInit = useCallback(() => {
+    setStatus(SpotifyDataCtxStatus.Init);
   }, []);
 
   /// Backup Items
   const backupPlaylists = useCallback(async () => {
-    setLoading(true);
-
     try {
       const spotifyPlaylists = await fetchUsersPlaylists();
       const playlistCores = spotifyPlaylists.map(convertPlaylistToCore);
@@ -71,14 +61,11 @@ export const SpotifyDataProvider = ({ children }: { children: ReactNode }): Reac
       DBLib.addMultipleItems<PlaylistCore>(StoreName.Playlist, playlistCores);
     } catch (error) {
       console.error("BackupPlaylists error", error);
-    } finally {
-      setLoading(false);
+      throw error;
     }
   }, []);
 
   const backupPlaylistTracks = useCallback(async () => {
-    setLoading(true);
-
     let currentPlaylist: PlaylistCore | null = null;
 
     try {
@@ -96,14 +83,11 @@ export const SpotifyDataProvider = ({ children }: { children: ReactNode }): Reac
       }
     } catch (error) {
       console.error("BackupPlaylistTracks error for currentPlaylist", currentPlaylist, error);
-    } finally {
-      setLoading(false);
+      throw error;
     }
   }, []);
 
   const backupAlbums = useCallback(async () => {
-    setLoading(true);
-
     try {
       const spotifyAlbums = await fetchUsersAlbums();
       const albumCores = spotifyAlbums.map(({ album }) => convertAlbumToCore(album));
@@ -111,26 +95,29 @@ export const SpotifyDataProvider = ({ children }: { children: ReactNode }): Reac
       DBLib.addMultipleItems<AlbumCore>(StoreName.Album, albumCores);
     } catch (error) {
       console.error("BackupAlbums error", error);
-    } finally {
-      setLoading(false);
+      throw error;
     }
   }, []);
 
   const postBackupProcess = useCallback(async () => {
     await getDataCount();
-    setBackupComplete(true);
+    setStatus(SpotifyDataCtxStatus.BackupComplete);
   }, [getDataCount]);
 
   const performBackup = useCallback(async () => {
-    await backupPlaylists();
-    await backupPlaylistTracks();
-    await backupAlbums();
-    await postBackupProcess();
+    setStatus(SpotifyDataCtxStatus.DataLoading);
+    try {
+      await backupPlaylists();
+      await backupPlaylistTracks();
+      await backupAlbums();
+      await postBackupProcess();
+    } catch {
+      setStatus(SpotifyDataCtxStatus.BackupFailure);
+    }
   }, [backupAlbums, backupPlaylistTracks, backupPlaylists, postBackupProcess]);
 
   const refreshBackup = useCallback(async () => {
-    setLoading(true);
-    setBackupComplete(false);
+    setStatus(SpotifyDataCtxStatus.DataLoading);
 
     try {
       const dbAlbums = await DBLib.getAllItems<AlbumCore>(StoreName.Album);
@@ -163,40 +150,39 @@ export const SpotifyDataProvider = ({ children }: { children: ReactNode }): Reac
 
       await postBackupProcess();
     } catch (error) {
+      setStatus(SpotifyDataCtxStatus.BackupFailure);
       console.error("RefreshBackup error", error);
-    } finally {
-      setLoading(false);
     }
   }, [backupPlaylistTracks, postBackupProcess]);
 
   /// Delete Items
   const askForDeleteConfirm = useCallback(async () => {
-    setShowDeleteConfirm(true);
+    setStatus(SpotifyDataCtxStatus.DeleteNeedsConfirmation);
   }, []);
 
   const deleteBackup = useCallback(async () => {
-    setLoading(false);
+    setStatus(SpotifyDataCtxStatus.DataLoading);
+
     try {
       await DBLib.deleteAllItems(StoreName.Playlist);
       await DBLib.deleteAllItems(StoreName.Album);
 
       setDataCount(0);
-      setShowDeleteConfirm(false);
-      setDeleteComplete(true);
+      setStatus(SpotifyDataCtxStatus.DeleteComplete);
     } catch (error) {
+      setStatus(SpotifyDataCtxStatus.DeleteFailure);
       console.error("DeleteBackup error", error);
-    } finally {
-      setLoading(false);
     }
   }, []);
 
   const cancelDelete = useCallback(async () => {
-    setShowDeleteConfirm(false);
+    setStatus(SpotifyDataCtxStatus.Init);
   }, []);
 
   /// File Store
   const downloadDataAsJson = useCallback(async () => {
-    setLoading(true);
+    setStatus(SpotifyDataCtxStatus.DownloadLoading);
+
     try {
       const playlists = await DBLib.getAllItems<PlaylistCore>(StoreName.Playlist);
       const albums = await DBLib.getAllItems<AlbumCore>(StoreName.Album);
@@ -211,12 +197,13 @@ export const SpotifyDataProvider = ({ children }: { children: ReactNode }): Reac
     } catch (error) {
       console.error("DownloadData error", error);
     } finally {
-      setLoading(false);
+      setStatus(SpotifyDataCtxStatus.Init);
     }
   }, []);
 
   const downloadDataAsTxt = useCallback(async (spotifyUserId: string) => {
-    setLoading(true);
+    setStatus(SpotifyDataCtxStatus.DownloadLoading);
+
     try {
       const playlists = await DBLib.getAllItems<PlaylistCore>(StoreName.Playlist);
       const albums = await DBLib.getAllItems<AlbumCore>(StoreName.Album);
@@ -238,7 +225,7 @@ export const SpotifyDataProvider = ({ children }: { children: ReactNode }): Reac
     } catch (error) {
       console.error("DownloadData error", error);
     } finally {
-      setLoading(false);
+      setStatus(SpotifyDataCtxStatus.Init);
     }
   }, []);
 
@@ -251,7 +238,8 @@ export const SpotifyDataProvider = ({ children }: { children: ReactNode }): Reac
     const reader = new FileReader();
 
     reader.onload = async (e): Promise<void> => {
-      setLoading(true);
+      setStatus(SpotifyDataCtxStatus.DataLoading);
+
       try {
         const jsonString = e.target?.result as string;
 
@@ -265,12 +253,10 @@ export const SpotifyDataProvider = ({ children }: { children: ReactNode }): Reac
         await DBLib.addMultipleItems<AlbumCore>(StoreName.Album, albums);
 
         setDataCount(playlists.length + albums.length);
-        setUploadComplete(true);
+        setStatus(SpotifyDataCtxStatus.UploadComplete);
       } catch (error) {
         console.error("UploadData error", error);
-        setUploadFailure(true);
-      } finally {
-        setLoading(false);
+        setStatus(SpotifyDataCtxStatus.UploadFailure);
       }
     };
 
@@ -280,14 +266,9 @@ export const SpotifyDataProvider = ({ children }: { children: ReactNode }): Reac
   return (
     <SpotifyDataContext.Provider
       value={{
-        loading,
+        status,
         dataCount,
-        backupComplete,
-        uploadComplete,
-        uploadFailure,
-        deleteComplete,
-        showDeleteConfirm,
-        clearCompletes,
+        resetToInit,
         performBackup,
         refreshBackup,
         askForDeleteConfirm,

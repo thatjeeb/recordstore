@@ -19,15 +19,23 @@ export const spotifyUrls = {
   currentUsersAlbums: "/me/albums",
 };
 
+export enum SpotifyDataCtxStatus {
+  Init,
+  DataLoading,
+  DownloadLoading,
+  BackupComplete,
+  BackupFailure,
+  UploadComplete,
+  UploadFailure,
+  DeleteNeedsConfirmation,
+  DeleteComplete,
+  DeleteFailure,
+}
+
 export interface SpotifyDataContextResponse {
-  loading: boolean;
+  status: SpotifyDataCtxStatus;
   dataCount: number;
-  backupComplete: boolean;
-  uploadComplete: boolean;
-  uploadFailure: boolean;
-  deleteComplete: boolean;
-  showDeleteConfirm: boolean;
-  clearCompletes: () => void;
+  resetToInit: () => void;
   performBackup: () => Promise<void>;
   refreshBackup: () => Promise<void>;
   askForDeleteConfirm: () => Promise<void>;

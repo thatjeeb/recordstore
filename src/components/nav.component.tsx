@@ -1,7 +1,7 @@
 import React, { useState, type ReactNode } from "react";
 import { NavLink, useLocation, useNavigate } from "react-router";
 import { AppRoutes } from "../app.definitions";
-import { useSpotifyAuth, useSpotifyData } from "../lib";
+import { SpotifyDataCtxStatus, useSpotifyAuth, useSpotifyData } from "../lib";
 import { AppClasses } from "../styles/appClasses";
 
 export function Nav(): ReactNode {
@@ -9,9 +9,9 @@ export function Nav(): ReactNode {
   const navigate = useNavigate();
   const { pathname } = useLocation();
   const { loggedIn, deleteAuthTokens: deleteTokens } = useSpotifyAuth();
-  const { loading, dataCount } = useSpotifyData();
+  const { status, dataCount } = useSpotifyData();
 
-  if (!loggedIn || loading) return null;
+  if (!loggedIn || status === SpotifyDataCtxStatus.DataLoading) return null;
 
   function logout(): void {
     deleteTokens();

@@ -1,6 +1,6 @@
 import React, { useEffect, type ReactNode, type ChangeEvent } from "react";
 import { AppClasses } from "../../styles/appClasses";
-import { useSpotifyData } from "../../lib";
+import { useSpotifyData, SpotifyDataCtxStatus } from "../../lib";
 import { GoToDownloadButton, GoHomeButton, Loader, GoToLibraryButton } from "../../components";
 import { AppLanguage } from "../../app.language";
 import { isLocalHost } from "../../utils";
@@ -10,33 +10,18 @@ function BackupWrapper({ children }: { children: ReactNode }): ReactNode {
 }
 
 export function Backup(): ReactNode {
-  const {
-    loading,
-    dataCount,
-    backupComplete,
-    uploadComplete,
-    uploadFailure,
-    deleteComplete,
-    showDeleteConfirm,
-    clearCompletes,
-    performBackup,
-    refreshBackup,
-    askForDeleteConfirm,
-    deleteBackup,
-    cancelDelete,
-    uploadData,
-  } = useSpotifyData();
+  const { status, dataCount, resetToInit, performBackup, refreshBackup, askForDeleteConfirm, deleteBackup, cancelDelete, uploadData } = useSpotifyData();
 
   useEffect(() => {
-    return (): void => clearCompletes();
-  }, [clearCompletes]);
+    return (): void => resetToInit();
+  }, [resetToInit]);
 
   async function handleFileChange(event: ChangeEvent<HTMLInputElement>): Promise<void> {
     const file = event.target.files?.[0];
     uploadData(file);
   }
 
-  if (loading) {
+  if (status === SpotifyDataCtxStatus.DataLoading) {
     return (
       <BackupWrapper>
         <Loader />
@@ -46,7 +31,7 @@ export function Backup(): ReactNode {
     );
   }
 
-  if (showDeleteConfirm) {
+  if (status === SpotifyDataCtxStatus.DeleteNeedsConfirmation) {
     return (
       <BackupWrapper>
         <p>Are you sure you want to delete your backup data? This action cannot be undone.</p>
@@ -68,7 +53,7 @@ export function Backup(): ReactNode {
     );
   }
 
-  if (uploadFailure) {
+  if (status === SpotifyDataCtxStatus.UploadFailure) {
     return (
       <BackupWrapper>
         <p>Upload failed</p>
@@ -78,8 +63,28 @@ export function Backup(): ReactNode {
     );
   }
 
-  if (backupComplete || uploadComplete) {
-    const actionWord = backupComplete ? "Backup" : "Upload";
+  if (status === SpotifyDataCtxStatus.BackupFailure) {
+    return (
+      <BackupWrapper>
+        <p>Backup failed</p>
+
+        <p>Please refresh the page and try again.</p>
+      </BackupWrapper>
+    );
+  }
+
+  if (status === SpotifyDataCtxStatus.DeleteFailure) {
+    return (
+      <BackupWrapper>
+        <p>Delete failed</p>
+
+        <p>Please refresh the page and try again.</p>
+      </BackupWrapper>
+    );
+  }
+
+  if (status === SpotifyDataCtxStatus.BackupComplete || status === SpotifyDataCtxStatus.UploadComplete) {
+    const actionWord = status === SpotifyDataCtxStatus.BackupComplete ? "Backup" : "Upload";
 
     return (
       <BackupWrapper>
@@ -96,7 +101,7 @@ export function Backup(): ReactNode {
     );
   }
 
-  if (deleteComplete) {
+  if (status === SpotifyDataCtxStatus.DeleteComplete) {
     return (
       <BackupWrapper>
         <p>Data deleted</p>
@@ -113,7 +118,7 @@ export function Backup(): ReactNode {
   if (dataCount > 0) {
     return (
       <BackupWrapper>
-        <p>You previously completed a backup. Press the button below to refresh your backup with the latest data from your Spotify account.</p>
+        <p>You previously performed a backup. Press the button below to refresh your backup with the latest data from your Spotify account.</p>
 
         <p>{AppLanguage.StorageWarning}</p>
 
