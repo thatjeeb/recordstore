@@ -68,7 +68,7 @@ export function Backup(): ReactNode {
     );
   }
 
-  if (uploadFailure)
+  if (uploadFailure) {
     return (
       <BackupWrapper>
         <p>Upload failed</p>
@@ -76,6 +76,7 @@ export function Backup(): ReactNode {
         <p>Please ensure your file is the correct format and try again.</p>
       </BackupWrapper>
     );
+  }
 
   if (backupComplete || uploadComplete) {
     const actionWord = backupComplete ? "Backup" : "Upload";
