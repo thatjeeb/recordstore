@@ -1,5 +1,5 @@
 import React, { type ReactNode } from "react";
-import { PlaylistCore } from "../lib";
+import type { PlaylistMeta } from "../lib";
 import { LibraryItem } from "./libraryItem.component";
 import { Link } from "react-router-dom";
 import { AppRoutes } from "../app.definitions";
@@ -8,12 +8,12 @@ import { PlaylistIcon } from "./icons.component";
 import { AppLanguage } from "../app.language";
 
 interface PlaylistItemProps {
-  playlist: PlaylistCore;
+  playlistMeta: PlaylistMeta;
 }
 
 export function PlaylistItem(props: PlaylistItemProps): ReactNode {
-  const { playlist } = props;
-  const { id, name } = playlist;
+  const { playlistMeta } = props;
+  const { id, name } = playlistMeta;
 
   return (
     <Link className={AppClasses.PlaylistItem} to={`${AppRoutes.PlaylistList}/${id}`}>

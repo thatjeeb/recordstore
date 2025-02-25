@@ -6,6 +6,7 @@ import type {
   ArtistCore,
   Playlist,
   PlaylistCore,
+  PlaylistMeta,
   PlaylistTrack,
   SavedAlbum,
   SpotifyItemFetchResponse,
@@ -161,7 +162,7 @@ export const getArtistsNameString = (artists?: ArtistCore[]): string => {
   return (artists || []).map((a) => a.name).join(", ");
 };
 
-export const sortPlaylistsByName = (playlists: PlaylistCore[]): PlaylistCore[] => {
+export const sortPlaylistsByName = <T extends PlaylistMeta>(playlists: T[]): T[] => {
   return playlists.sort((a, b) => a.name.localeCompare(b.name));
 };
 
@@ -173,11 +174,11 @@ export const sortAlbumsByArtistsName = (albums: AlbumCore[]): AlbumCore[] => {
   });
 };
 
-export const sortAndSplitPlaylists = (playlists: PlaylistCore[], spotifyUserId: string): { usersPlaylists: PlaylistCore[]; followedPlaylists: PlaylistCore[] } => {
+export const sortAndSplitPlaylists = <T extends PlaylistMeta>(playlists: T[], spotifyUserId: string): { usersPlaylists: T[]; followedPlaylists: T[] } => {
   const sortedPlaylists = sortPlaylistsByName(playlists);
 
-  const usersPlaylists: PlaylistCore[] = [];
-  const followedPlaylists: PlaylistCore[] = [];
+  const usersPlaylists: T[] = [];
+  const followedPlaylists: T[] = [];
 
   sortedPlaylists.forEach((p) => {
     if (p.owner.id === spotifyUserId) {

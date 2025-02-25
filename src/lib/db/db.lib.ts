@@ -20,8 +20,15 @@ const initDb = (): Promise<void> => {
 
     openRequest.onupgradeneeded = (): void => {
       const db = openRequest.result;
-      db.createObjectStore(StoreName.Playlist, { keyPath: "id" });
-      db.createObjectStore(StoreName.Album, { keyPath: "id" });
+      if (!db.objectStoreNames.contains(StoreName.PlaylistMeta)) {
+        db.createObjectStore(StoreName.PlaylistMeta, { keyPath: "id" });
+      }
+      if (!db.objectStoreNames.contains(StoreName.Playlist)) {
+        db.createObjectStore(StoreName.Playlist, { keyPath: "id" });
+      }
+      if (!db.objectStoreNames.contains(StoreName.Album)) {
+        db.createObjectStore(StoreName.Album, { keyPath: "id" });
+      }
     };
 
     openRequest.onsuccess = (): void => {
@@ -134,44 +141,6 @@ const addItem = <T>(storeName: StoreName, item: T): Promise<void> => {
   });
 };
 
-const addMultipleItems = <T>(storeName: StoreName, items: T[]): Promise<void> => {
-  return new Promise((resolve, reject) => {
-    const openRequest = indexedDB.open(dbConsts.name, dbConsts.version);
-
-    openRequest.onsuccess = (): void => {
-      const db = openRequest.result;
-      const tx = db.transaction(storeName, "readwrite");
-      const store = tx.objectStore(storeName);
-
-      let success = true;
-      const msg = "Error adding multiple items";
-
-      for (const item of items) {
-        const addRequest = store.add(item);
-
-        addRequest.onsuccess = (): void => {
-          //
-        };
-
-        addRequest.onerror = (): void => {
-          success = false;
-          handleRequestError(addRequest, () => {}, "adding multiple items", storeName);
-        };
-      }
-
-      if (success) {
-        resolve();
-      } else {
-        reject(msg);
-      }
-    };
-
-    openRequest.onerror = (): void => {
-      handleRequestError(openRequest, reject, "opening db during addMultipleItems", storeName);
-    };
-  });
-};
-
 const updateItem = <T>(storeName: StoreName, item: T): Promise<T> => {
   return new Promise((resolve, reject) => {
     const openRequest = indexedDB.open(dbConsts.name, dbConsts.version);
@@ -193,6 +162,44 @@ const updateItem = <T>(storeName: StoreName, item: T): Promise<T> => {
 
     openRequest.onerror = (): void => {
       handleRequestError(openRequest, reject, "opening db during updateItem", storeName);
+    };
+  });
+};
+
+const updateMultipleItems = <T>(storeName: StoreName, items: T[]): Promise<void> => {
+  return new Promise((resolve, reject) => {
+    const openRequest = indexedDB.open(dbConsts.name, dbConsts.version);
+
+    openRequest.onsuccess = (): void => {
+      const db = openRequest.result;
+      const tx = db.transaction(storeName, "readwrite");
+      const store = tx.objectStore(storeName);
+
+      let success = true;
+      const msg = "Error updating multiple items";
+
+      for (const item of items) {
+        const updateRequest = store.put(item);
+
+        updateRequest.onsuccess = (): void => {
+          //
+        };
+
+        updateRequest.onerror = (): void => {
+          success = false;
+          handleRequestError(updateRequest, () => {}, "updating multiple items", storeName);
+        };
+      }
+
+      if (success) {
+        resolve();
+      } else {
+        reject(msg);
+      }
+    };
+
+    openRequest.onerror = (): void => {
+      handleRequestError(openRequest, reject, "opening db during updateMultipleItems", storeName);
     };
   });
 };
@@ -253,8 +260,8 @@ export const DBLib = {
   getItem,
   getAllItems,
   addItem,
-  addMultipleItems,
+  updateItem,
+  updateMultipleItems,
   deleteItem,
   deleteAllItems,
-  updateItem,
 };

@@ -1,7 +1,7 @@
 import React, { createContext, useCallback, useContext, useState, useEffect, type ReactNode } from "react";
 import { convertAlbumsToDownloadString, convertPlaylistsToDownloadString, downloadJsonToFile, downloadTextToFile, getDayMonthYear } from "../../utils";
 import { DBLib, StoreName } from "../db";
-import { SpotifyDataCtxStatus, type AlbumCore, type PlaylistCore, type SpotifyDataContextResponse } from "./spotify.definition";
+import { PlaylistMeta, SpotifyDataCtxStatus, type AlbumCore, type PlaylistCore, type SpotifyDataContextResponse } from "./spotify.definition";
 import {
   fetchUsersPlaylists,
   convertPlaylistToCore,
@@ -58,7 +58,8 @@ export const SpotifyDataProvider = ({ children }: { children: ReactNode }): Reac
       const spotifyPlaylists = await fetchUsersPlaylists();
       const playlistCores = spotifyPlaylists.map(convertPlaylistToCore);
 
-      DBLib.addMultipleItems<PlaylistCore>(StoreName.Playlist, playlistCores);
+      await DBLib.updateMultipleItems<PlaylistMeta>(StoreName.PlaylistMeta, playlistCores);
+      await DBLib.updateMultipleItems<PlaylistCore>(StoreName.Playlist, playlistCores);
     } catch (error) {
       console.error("BackupPlaylists error", error);
       throw error;
@@ -92,7 +93,7 @@ export const SpotifyDataProvider = ({ children }: { children: ReactNode }): Reac
       const spotifyAlbums = await fetchUsersAlbums();
       const albumCores = spotifyAlbums.map(({ album }) => convertAlbumToCore(album));
 
-      DBLib.addMultipleItems<AlbumCore>(StoreName.Album, albumCores);
+      await DBLib.updateMultipleItems<AlbumCore>(StoreName.Album, albumCores);
     } catch (error) {
       console.error("BackupAlbums error", error);
       throw error;
@@ -116,45 +117,6 @@ export const SpotifyDataProvider = ({ children }: { children: ReactNode }): Reac
     }
   }, [backupAlbums, backupPlaylistTracks, backupPlaylists, postBackupProcess]);
 
-  const refreshBackup = useCallback(async () => {
-    setStatus(SpotifyDataCtxStatus.DataLoading);
-
-    try {
-      const dbAlbums = await DBLib.getAllItems<AlbumCore>(StoreName.Album);
-      const dbAlbumIds = new Set(dbAlbums.map((album) => album.id));
-
-      const spotifyAlbums = await fetchUsersAlbums();
-
-      for (const { album } of spotifyAlbums) {
-        if (!dbAlbumIds.has(album.id)) {
-          const albumCore = convertAlbumToCore(album);
-          await DBLib.addItem<AlbumCore>(StoreName.Album, albumCore);
-        }
-      }
-
-      const spotifyPlaylists = await fetchUsersPlaylists();
-
-      for (const playlist of spotifyPlaylists) {
-        try {
-          const dbPlaylist = await DBLib.getItem<PlaylistCore>(StoreName.Playlist, playlist.id);
-          if (!dbPlaylist || dbPlaylist.snapshot_id !== playlist.snapshot_id) {
-            const playlistCore = convertPlaylistToCore(playlist);
-            await DBLib.updateItem<PlaylistCore>(StoreName.Playlist, playlistCore);
-          }
-        } catch (error) {
-          console.error("RefreshBackup playlist getItem error", error);
-        }
-      }
-
-      await backupPlaylistTracks();
-
-      await postBackupProcess();
-    } catch (error) {
-      setStatus(SpotifyDataCtxStatus.BackupFailure);
-      console.error("RefreshBackup error", error);
-    }
-  }, [backupPlaylistTracks, postBackupProcess]);
-
   /// Delete Items
   const askForDeleteConfirm = useCallback(async () => {
     setStatus(SpotifyDataCtxStatus.DeleteNeedsConfirmation);
@@ -164,6 +126,7 @@ export const SpotifyDataProvider = ({ children }: { children: ReactNode }): Reac
     setStatus(SpotifyDataCtxStatus.DataLoading);
 
     try {
+      await DBLib.deleteAllItems(StoreName.PlaylistMeta);
       await DBLib.deleteAllItems(StoreName.Playlist);
       await DBLib.deleteAllItems(StoreName.Album);
 
@@ -249,8 +212,11 @@ export const SpotifyDataProvider = ({ children }: { children: ReactNode }): Reac
           throw new Error("Uploaded file contains invalid data");
         }
 
-        await DBLib.addMultipleItems<PlaylistCore>(StoreName.Playlist, playlists);
-        await DBLib.addMultipleItems<AlbumCore>(StoreName.Album, albums);
+        const playlistMetas: PlaylistMeta[] = playlists.map(({ id, name, snapshot_id, owner }) => ({ id, name, snapshot_id, owner }));
+
+        await DBLib.updateMultipleItems<PlaylistMeta>(StoreName.PlaylistMeta, playlistMetas);
+        await DBLib.updateMultipleItems<PlaylistCore>(StoreName.Playlist, playlists);
+        await DBLib.updateMultipleItems<AlbumCore>(StoreName.Album, albums);
 
         setDataCount(playlists.length + albums.length);
         setStatus(SpotifyDataCtxStatus.UploadComplete);
@@ -270,7 +236,6 @@ export const SpotifyDataProvider = ({ children }: { children: ReactNode }): Reac
         dataCount,
         resetToInit,
         performBackup,
-        refreshBackup,
         askForDeleteConfirm,
         deleteBackup,
         cancelDelete,

@@ -10,7 +10,7 @@ function BackupWrapper({ children }: { children: ReactNode }): ReactNode {
 }
 
 export function Backup(): ReactNode {
-  const { status, dataCount, resetToInit, performBackup, refreshBackup, askForDeleteConfirm, deleteBackup, cancelDelete, uploadData } = useSpotifyData();
+  const { status, dataCount, resetToInit, performBackup, askForDeleteConfirm, deleteBackup, cancelDelete, uploadData } = useSpotifyData();
 
   useEffect(() => {
     return (): void => resetToInit();
@@ -123,7 +123,7 @@ export function Backup(): ReactNode {
         <p>{AppLanguage.StorageWarning}</p>
 
         <div className={AppClasses.ButtonRow}>
-          <button key="refresh-button" className={AppClasses.PrimaryButton} onClick={refreshBackup}>
+          <button key="refresh-button" className={AppClasses.PrimaryButton} onClick={performBackup}>
             Refresh Your Data
           </button>
 

@@ -37,7 +37,6 @@ export interface SpotifyDataContextResponse {
   dataCount: number;
   resetToInit: () => void;
   performBackup: () => Promise<void>;
-  refreshBackup: () => Promise<void>;
   askForDeleteConfirm: () => Promise<void>;
   deleteBackup: () => Promise<void>;
   cancelDelete: () => Promise<void>;
@@ -135,6 +134,8 @@ export interface Playlist {
 export interface PlaylistCore extends Pick<Playlist, "id" | "name" | "snapshot_id" | "owner"> {
   tracks: TrackCore[];
 }
+
+export type PlaylistMeta = Pick<PlaylistCore, "id" | "name" | "snapshot_id" | "owner">
 
 export interface Artist {
   external_urls: ExternalUrls;
