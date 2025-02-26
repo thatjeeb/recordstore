@@ -3,7 +3,7 @@ import { AppClasses } from "../../styles/appClasses";
 import { useSpotifyData, SpotifyDataCtxStatus } from "../../lib";
 import { GoToDownloadButton, GoHomeButton, Loader, GoToLibraryButton } from "../../components";
 import { AppLanguage } from "../../app.language";
-// import { isLocalHost } from "../../utils";
+import { isLocalHost, isPowerUser } from "../../utils";
 
 function BackupWrapper({ children }: { children: ReactNode }): ReactNode {
   return <div className={AppClasses.BackupDetailView}>{children}</div>;
@@ -152,12 +152,12 @@ export function Backup(): ReactNode {
          * This button is only available on localhost for now because it likely won't provide much value to non technical users,
          * i.e. users who are just interested in using this app online and not deploying it themselves.
          **/}
-        {/* {isLocalHost() && ( */}
+        {(isLocalHost() || isPowerUser()) && (
           <label className={AppClasses.SecondaryButton}>
             Upload Your Backup From JSON File
             <input className={AppClasses.BackupFileInput} type="file" accept=".json" onChange={handleFileChange} />
           </label>
-        {/* )} */}
+        )}
       </div>
     </BackupWrapper>
   );
