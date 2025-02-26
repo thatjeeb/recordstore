@@ -152,12 +152,12 @@ export function Backup(): ReactNode {
          * This button is only available on localhost for now because it likely won't provide much value to non technical users,
          * i.e. users who are just interested in using this app online and not deploying it themselves.
          **/}
-        {isLocalHost() && (
+        {/* {isLocalHost() && ( */}
           <label className={AppClasses.SecondaryButton}>
             Upload Your Backup From JSON File
             <input className={AppClasses.BackupFileInput} type="file" accept=".json" onChange={handleFileChange} />
           </label>
-        )}
+        {/* )} */}
       </div>
     </BackupWrapper>
   );
