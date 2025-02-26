@@ -3,7 +3,7 @@ import { AppClasses } from "../../styles/appClasses";
 import { useSpotifyData, SpotifyDataCtxStatus } from "../../lib";
 import { GoToDownloadButton, GoHomeButton, Loader, GoToLibraryButton } from "../../components";
 import { AppLanguage } from "../../app.language";
-import { isLocalHost } from "../../utils";
+// import { isLocalHost } from "../../utils";
 
 function BackupWrapper({ children }: { children: ReactNode }): ReactNode {
   return <div className={AppClasses.BackupDetailView}>{children}</div>;
