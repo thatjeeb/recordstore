@@ -12,6 +12,10 @@ export const convertPlaylistsToDownloadString = (playlists: PlaylistCore[], head
   for (const playlist of playlists) {
     str += `\n\n- ${playlist.name || AppLanguage.Untitled} -`;
 
+    if (!playlist.tracks.length) {
+      str+= "\n(Empty playlist)"
+    }
+
     for (const tracks of playlist.tracks) {
       str += `\n${tracks.name || AppLanguage.Untitled} - ${getArtistsNameString(tracks.artists) || AppLanguage.Untitled}`;
     }
