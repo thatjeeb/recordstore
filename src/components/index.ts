@@ -1,5 +1,6 @@
 export * from "./actionButtons.component";
 export * from "./albumItem.component";
+export * from "./attributionBar.component";
 export * from "./header.component";
 export * from "./icons.component";
 export * from "./inviteWarning.component";

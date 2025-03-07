@@ -1,5 +1,10 @@
+@use '../mixins/breakpoints' as *;
+
 body {
   --gutterWidth: 12vw;
-
   --defaultTransition: all 0.3s ease-in-out;
+
+  @include mobile-breakpoint {
+    --gutterWidth: 8vw;
+  }
 }

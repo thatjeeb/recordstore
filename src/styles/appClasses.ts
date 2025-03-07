@@ -12,6 +12,10 @@ export enum AppClasses {
   Header = `${appRootClass}_header`,
   SmallPrint = `${appRootClass}_small-print`,
 
+  // Attribution
+  AttributionBar = `${appRootClass}_attribution-bar`,
+  SpotifyLogo = `${appRootClass}_spotify-logo`,
+
   /// Buttons
   ButtonRow = `${appRootClass}_button-row`,
   PrimaryButton = `${appRootClass}_primary-button`,

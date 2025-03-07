@@ -149,8 +149,9 @@ export function Backup(): ReactNode {
         </button>
 
         {/**
-         * This button is only available on localhost for now because it likely won't provide much value to non technical users,
-         * i.e. users who are just interested in using this app online and not deploying it themselves.
+         * This button is limited visibility because it likely won't provide much value to non technical users.
+         * A technical user will likely be deploying this app themselves, or can add the poweruser local storage key,
+         * and thus will be able to see this button.
          **/}
         {(isLocalHost() || isPowerUser()) && (
           <label className={AppClasses.SecondaryButton}>

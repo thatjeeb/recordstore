@@ -13,12 +13,12 @@ export const Home = (): ReactNode => {
     <div>
       <InviteWarning />
 
-      <p>
+      {/* <p>
         You&apos;ve spent lots of time curating your playlists and saving albums on Spotify. But what if Spotify
         goes down, or you lose access to your account?
       </p>
 
-      <p>Enter: Record Store.</p>
+      <p>Enter: Record Store.</p> */}
 
       <p>{loggedIn ? "With Record Store you can:" : <span>Begin by logging in to your spotify account, and then with Record Store you can:</span>}</p>
 
