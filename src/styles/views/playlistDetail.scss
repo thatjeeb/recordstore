@@ -1,0 +1,12 @@
+.record-store-playlist-detail {
+  &_title-bar {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+
+    .record-store-app_external-link {
+      width: 1.4rem;
+      height: 1.4rem;
+    }
+  }
+}

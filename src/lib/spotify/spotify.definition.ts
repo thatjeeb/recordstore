@@ -10,13 +10,19 @@ export const spotifyConsts = {
 };
 
 export const spotifyUrls = {
+  // Authorisation
   auth: "https://accounts.spotify.com/authorize",
   token: "https://accounts.spotify.com/api/token",
+  // API
   apiBase: "https://api.spotify.com/v1",
   firstPageQueryString: "offset=0&limit=50", // note: this does not include starting '?'
   currentUser: "/me",
   currentUsersPlaylists: "/me/playlists",
   currentUsersAlbums: "/me/albums",
+  // Item Links
+  playlistBase: "https://open.spotify.com/playlist/",
+  albumBase: "https://open.spotify.com/album/",
+  trackBase: "https://open.spotify.com/track/",
 };
 
 export enum SpotifyDataCtxStatus {
@@ -135,7 +141,7 @@ export interface PlaylistCore extends Pick<Playlist, "id" | "name" | "snapshot_i
   tracks: TrackCore[];
 }
 
-export type PlaylistMeta = Pick<PlaylistCore, "id" | "name" | "snapshot_id" | "owner">
+export type PlaylistMeta = Pick<PlaylistCore, "id" | "name" | "snapshot_id" | "owner">;
 
 export interface Artist {
   external_urls: ExternalUrls;

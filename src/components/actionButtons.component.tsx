@@ -1,9 +1,10 @@
 import React from "react";
-import type { ReactNode } from "react";
+import type { AnchorHTMLAttributes, ReactNode } from "react";
 import { Link } from "react-router";
 import { AppClasses } from "../styles/appClasses";
 import { AppRoutes } from "../app.definitions";
 import { useSpotifyAuth, useSpotifyData } from "../lib";
+import { ExternalLink } from "./icons.component";
 
 export function GoHomeButton(): ReactNode {
   return (
@@ -59,5 +60,13 @@ export function DownloadDataAsTextButton({ children }: { children?: ReactNode })
     <button className={AppClasses.PrimaryButton} onClick={() => downloadDataAsTxt(spotifyUserId)}>
       {children || "Download Your Data"}
     </button>
+  );
+}
+
+export function ViewOnSpotify(props: AnchorHTMLAttributes<HTMLAnchorElement>): ReactNode {
+  return (
+    <a className={AppClasses.ViewOnSpotify} title="View item on Spotify" target="_blank" rel="noreferrer" {...props}>
+      <ExternalLink />
+    </a>
   );
 }

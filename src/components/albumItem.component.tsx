@@ -1,5 +1,5 @@
 import React, { type ReactNode } from "react";
-import { AlbumCore } from "../lib";
+import { AlbumCore, spotifyUrls } from "../lib";
 import { LibraryItem } from "./libraryItem.component";
 import { AlbumIcon } from "./icons.component";
 import { getArtistsNameString } from "../lib/spotify/spotify.utils";
@@ -15,5 +15,5 @@ export function AlbumItem(props: AlbumItemProps): ReactNode {
 
   if (!title) return;
 
-  return <LibraryItem icon={<AlbumIcon />} title={title} subtitle={subtitle} />;
+  return <LibraryItem icon={<AlbumIcon />} title={title} subtitle={subtitle} link={spotifyUrls.albumBase + album.id} />;
 }

@@ -14,8 +14,14 @@
 
     &-title {
       margin: 0;
-      font-weight: 600;
       text-align: left;
+      font-weight: 600;
+
+      .record-store-app_view-on-spotify-link {
+        display: inline-block;
+        vertical-align: bottom;
+        margin-left: 5px;
+      }
     }
 
     &-subtitle {

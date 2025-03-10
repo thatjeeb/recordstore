@@ -18,7 +18,6 @@ export function PlaylistItem(props: PlaylistItemProps): ReactNode {
   return (
     <Link className={AppClasses.PlaylistItem} to={`${AppRoutes.PlaylistList}/${id}`}>
       <LibraryItem icon={<PlaylistIcon />} title={name || AppLanguage.Untitled} />
-      {">"}
     </Link>
   );
 }

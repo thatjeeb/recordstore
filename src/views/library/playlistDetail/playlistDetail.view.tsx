@@ -1,7 +1,7 @@
 import React, { useEffect, useState, type ReactNode } from "react";
 import { useParams } from "react-router";
-import { PlaylistCore, DBLib, StoreName, getArtistsNameString } from "../../../lib";
-import { LibraryItem, Loader, SongIcon } from "../../../components";
+import { PlaylistCore, DBLib, StoreName, getArtistsNameString, spotifyUrls } from "../../../lib";
+import { LibraryItem, Loader, SongIcon, ViewOnSpotify } from "../../../components";
 import { AppClasses } from "../../../styles/appClasses";
 import { AppLanguage } from "../../../app.language";
 
@@ -31,14 +31,25 @@ export function PlaylistDetail(): ReactNode {
 
   return (
     <div className={AppClasses.PlaylistDetailView}>
-      <h2>{playlist?.name || AppLanguage.Untitled}</h2>
+      <div className={AppClasses.PlaylistDetailViewTitleBar}>
+        <h2>{playlist?.name || AppLanguage.Untitled}</h2>
+        <ViewOnSpotify href={spotifyUrls.playlistBase + playlist?.id} />
+      </div>
 
       {!playlist?.tracks?.length && <p>No songs found.</p>}
 
       {playlist?.tracks?.map((t) => {
         if (!t.name) return;
 
-        return <LibraryItem key={"playlist-track-" + t.id} icon={<SongIcon />} title={t.name} subtitle={getArtistsNameString(t.artists)} />;
+        return (
+          <LibraryItem
+            key={"playlist-track-" + t.id}
+            icon={<SongIcon />}
+            title={t.name}
+            subtitle={getArtistsNameString(t.artists)}
+            link={spotifyUrls.trackBase + t.id}
+          />
+        );
       })}
     </div>
   );

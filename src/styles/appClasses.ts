@@ -14,13 +14,13 @@ export enum AppClasses {
 
   // Attribution
   AttributionBar = `${appRootClass}_attribution-bar`,
-  SpotifyLogo = `${appRootClass}_spotify-logo`,
 
   /// Buttons
   ButtonRow = `${appRootClass}_button-row`,
   PrimaryButton = `${appRootClass}_primary-button`,
   SecondaryButton = `${appRootClass}_secondary-button`,
   DangerButton = `${appRootClass}_danger-button`,
+  ViewOnSpotify = `${appRootClass}_view-on-spotify-link`,
 
   /// Loader
   LoaderContainer = `${appRootClass}_loader-container`,
@@ -51,6 +51,8 @@ export enum AppClasses {
   PlaylistIcon = `${appRootClass}_playlist-icon`,
   AlbumIcon = `${appRootClass}_album-icon`,
   SongIcon = `${appRootClass}_song-icon`,
+  SpotifyLogo = `${appRootClass}_spotify-logo`,
+  ExternalLink = `${appRootClass}_external-link`,
 
   // Views
   /// Home
@@ -65,4 +67,5 @@ export enum AppClasses {
 
   /// Playlist Detail
   PlaylistDetailView = playlistDetailViewClass,
+  PlaylistDetailViewTitleBar = `${playlistDetailViewClass}_title-bar`,
 }
