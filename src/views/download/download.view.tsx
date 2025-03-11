@@ -1,5 +1,5 @@
 import React, { type ReactNode } from "react";
-import { DownloadDataAsJsonButton, DownloadDataAsTextButton } from "../../components";
+import { DownloadDataAsTextButton } from "../../components";
 import { AppClasses } from "../../styles/appClasses";
 
 export function Download(): ReactNode {
