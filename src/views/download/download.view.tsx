@@ -13,12 +13,12 @@ export function Download(): ReactNode {
         <DownloadDataAsTextButton>Download TXT File</DownloadDataAsTextButton>
       </div>
 
-      <p>
+      {/* <p>
         Download backup data as <b>.json</b> file:
       </p>
       <div className={AppClasses.ButtonRow}>
         <DownloadDataAsJsonButton>Download JSON File</DownloadDataAsJsonButton>
-      </div>
+      </div> */}
     </div>
   );
 }
