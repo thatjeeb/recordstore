@@ -8,7 +8,7 @@ export function Download(): ReactNode {
       <p>
         Download backup data as <b>.txt</b> file:
       </p>
-      <p className={AppClasses.SmallPrint}>This is the version most users will find useful.</p>
+      {/* <p className={AppClasses.SmallPrint}>This is the version most users will find useful.</p> */}
       <div className={AppClasses.ButtonRow}>
         <DownloadDataAsTextButton>Download TXT File</DownloadDataAsTextButton>
       </div>
