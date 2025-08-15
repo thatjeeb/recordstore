@@ -1,5 +1,13 @@
 import React, { createContext, useCallback, useContext, useState, useEffect, type ReactNode } from "react";
-import { convertAlbumsToDownloadString, convertPlaylistsToDownloadString, downloadJsonToFile, downloadTextToFile, getDayMonthYear } from "../../utils";
+import {
+  convertAlbumsToDownloadString,
+  convertPlaylistsToDownloadString,
+  downloadJsonToFile,
+  downloadTextToFile,
+  getDayMonthYear,
+  convertTracksToCsv,
+  sanitizeFilename,
+} from "../../utils";
 import { DBLib, StoreName } from "../db";
 import { PlaylistMeta, SpotifyDataCtxStatus, type AlbumCore, type PlaylistCore, type SpotifyDataContextResponse } from "./spotify.definition";
 import {
@@ -72,7 +80,7 @@ export const SpotifyDataProvider = ({ children }: { children: ReactNode }): Reac
     try {
       const playlists = await DBLib.getAllItems<PlaylistCore>(StoreName.Playlist);
 
-      for (const playlist of playlists as PlaylistCore[]) {
+      for (const playlist of playlists) {
         currentPlaylist = playlist;
 
         const playlistTracks = await fetchPlaylistTracks(playlist.id);
@@ -164,6 +172,49 @@ export const SpotifyDataProvider = ({ children }: { children: ReactNode }): Reac
     }
   }, []);
 
+  const downloadPlaylistAsCSV = useCallback(async (playlistId: string) => {
+    setStatus(SpotifyDataCtxStatus.DownloadLoading);
+
+    try {
+      const playlist = await DBLib.getItem<PlaylistCore>(StoreName.Playlist, playlistId || "");
+
+      const { day, month, year } = getDayMonthYear();
+
+      // Convert tracks to CSV
+      const csvString = convertTracksToCsv(playlist.tracks);
+
+      // Download as CSV
+      const filename = sanitizeFilename(`spotify_data_${playlist.name}_${year}_${month}_${day}.csv`);
+      downloadTextToFile(csvString, filename, "text/csv;charset=utf-8;");
+    } catch (error) {
+      console.error("DownloadData error", error);
+    } finally {
+      setStatus(SpotifyDataCtxStatus.Init);
+    }
+  }, []);
+
+  const downloadAllPlaylistsAsCSVs = useCallback(async () => {
+    setStatus(SpotifyDataCtxStatus.DownloadLoading);
+
+    try {
+      const { day, month, year } = getDayMonthYear();
+      const playlists = await DBLib.getAllItems<PlaylistCore>(StoreName.Playlist);
+
+      for (const playlist of playlists) {
+        // Convert tracks to CSV
+        const csvString = convertTracksToCsv(playlist.tracks);
+
+        // Download as CSV
+        const filename = sanitizeFilename(`spotify_data_${playlist.name}_${year}_${month}_${day}.csv`);
+        downloadTextToFile(csvString, filename, "text/csv;charset=utf-8;");
+      }
+    } catch (error) {
+      console.error("DownloadData error", error);
+    } finally {
+      setStatus(SpotifyDataCtxStatus.Init);
+    }
+  }, []);
+
   const downloadDataAsTxt = useCallback(async (spotifyUserId: string) => {
     setStatus(SpotifyDataCtxStatus.DownloadLoading);
 
@@ -241,6 +292,8 @@ export const SpotifyDataProvider = ({ children }: { children: ReactNode }): Reac
         cancelDelete,
         downloadDataAsJson,
         downloadDataAsTxt,
+        downloadPlaylistAsCSV,
+        downloadAllPlaylistsAsCSVs,
         uploadData,
       }}
     >

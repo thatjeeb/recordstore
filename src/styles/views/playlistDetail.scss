@@ -1,12 +1,23 @@
+@use "../mixins/breakpoints" as *;
+
 .record-store-playlist-detail {
   &_title-bar {
     display: flex;
+    flex-wrap: wrap;
     align-items: center;
     gap: 5px;
 
     .record-store-app_external-link {
       width: 1.4rem;
       height: 1.4rem;
+    }
+
+    .record-store-app_primary-button {
+      margin-left: auto;
+
+      @include mobile-breakpoint {
+        margin-left: unset;
+      }
     }
   }
 }

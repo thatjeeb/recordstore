@@ -50,6 +50,30 @@ export function DownloadDataAsJsonButton({ children }: { children?: ReactNode })
   );
 }
 
+export function DownloadPlaylistAsCSVButton({ children, playlistId }: { playlistId: string; children?: ReactNode }): ReactNode {
+  const { dataCount, downloadPlaylistAsCSV } = useSpotifyData();
+
+  if (!dataCount) return;
+
+  return (
+    <button className={AppClasses.PrimaryButton} onClick={() => downloadPlaylistAsCSV(playlistId)}>
+      {children || "Download Your Playlist as CSV"}
+    </button>
+  );
+}
+
+export function DownloadAllPlaylistsAsCSVsButton({ children }: { children?: ReactNode }): ReactNode {
+  const { dataCount, downloadAllPlaylistsAsCSVs } = useSpotifyData();
+
+  if (!dataCount) return;
+
+  return (
+    <button className={AppClasses.PrimaryButton} onClick={downloadAllPlaylistsAsCSVs}>
+      {children || "Download All Your Playlists as CSVs"}
+    </button>
+  );
+}
+
 export function DownloadDataAsTextButton({ children }: { children?: ReactNode }): ReactNode {
   const { spotifyUserId } = useSpotifyAuth();
   const { dataCount, downloadDataAsTxt } = useSpotifyData();

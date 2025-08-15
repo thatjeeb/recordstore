@@ -48,6 +48,8 @@ export interface SpotifyDataContextResponse {
   cancelDelete: () => Promise<void>;
   downloadDataAsJson: () => Promise<void>;
   downloadDataAsTxt: (spotifyUserId: string) => Promise<void>;
+  downloadPlaylistAsCSV: (playlistId: string) => Promise<void>;
+  downloadAllPlaylistsAsCSVs: () => Promise<void>;
   uploadData: (file?: File) => Promise<void>;
 }
 

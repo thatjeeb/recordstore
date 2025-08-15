@@ -1,7 +1,7 @@
 import React, { useEffect, useState, type ReactNode } from "react";
 import { useParams } from "react-router";
 import { PlaylistCore, DBLib, StoreName, getArtistsNameString, spotifyUrls } from "../../../lib";
-import { LibraryItem, Loader, SongIcon, ViewOnSpotify } from "../../../components";
+import { DownloadPlaylistAsCSVButton, LibraryItem, Loader, SongIcon, ViewOnSpotify } from "../../../components";
 import { AppClasses } from "../../../styles/appClasses";
 import { AppLanguage } from "../../../app.language";
 
@@ -15,7 +15,7 @@ export function PlaylistDetail(): ReactNode {
       setLoading(true);
 
       try {
-        const dbPlaylist = (await DBLib.getItem<PlaylistCore>(StoreName.Playlist, playlistId || "")) as PlaylistCore;
+        const dbPlaylist = await DBLib.getItem<PlaylistCore>(StoreName.Playlist, playlistId || "");
         setPlaylist(dbPlaylist);
       } catch (error) {
         console.error(error);
@@ -34,6 +34,8 @@ export function PlaylistDetail(): ReactNode {
       <div className={AppClasses.PlaylistDetailViewTitleBar}>
         <h2>{playlist?.name || AppLanguage.Untitled}</h2>
         <ViewOnSpotify href={spotifyUrls.playlistBase + playlist?.id} />
+
+        {!!playlist?.id && <DownloadPlaylistAsCSVButton playlistId={playlist?.id || ""} >Download Playlist as CSV</DownloadPlaylistAsCSVButton>}
       </div>
 
       {!playlist?.tracks?.length && <p>No songs found.</p>}
