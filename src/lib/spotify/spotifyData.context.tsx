@@ -20,6 +20,7 @@ import {
   sortAlbumsByArtistsName,
   sortAndSplitPlaylists,
 } from "./spotify.utils";
+import { AppLanguage } from "../../app.language";
 
 const SpotifyDataContext = createContext<SpotifyDataContextResponse | undefined>(undefined);
 
@@ -184,7 +185,7 @@ export const SpotifyDataProvider = ({ children }: { children: ReactNode }): Reac
       const csvString = convertTracksToCsv(playlist.tracks);
 
       // Download as CSV
-      const filename = sanitizeFilename(`spotify_data_${playlist.name}_${year}_${month}_${day}.csv`);
+      const filename = sanitizeFilename(`spotify_data_${playlist.name || AppLanguage.Untitled}_${year}_${month}_${day}.csv`);
       downloadTextToFile(csvString, filename, "text/csv;charset=utf-8;");
     } catch (error) {
       console.error("DownloadData error", error);
@@ -205,7 +206,7 @@ export const SpotifyDataProvider = ({ children }: { children: ReactNode }): Reac
         const csvString = convertTracksToCsv(playlist.tracks);
 
         // Download as CSV
-        const filename = sanitizeFilename(`spotify_data_${playlist.name}_${year}_${month}_${day}.csv`);
+        const filename = sanitizeFilename(`spotify_data_${playlist.name || AppLanguage.Untitled}_${year}_${month}_${day}.csv`);
         downloadTextToFile(csvString, filename, "text/csv;charset=utf-8;");
       }
     } catch (error) {
